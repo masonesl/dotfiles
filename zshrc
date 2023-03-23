@@ -1,7 +1,7 @@
 # Symlink to ~/.zshrc
 
 # Command history settings
-HISTFILE=~/.cache/zfs_histfile
+HISTFILE=~/.cache/zsh_histfile
 HISTSIZE=10000
 SAVEHIST=10000
 
@@ -11,13 +11,12 @@ SAVEHIST=10000
 
 export EDITOR=nvim
 
-# TODO: Move these variables to another local file
+# @TODO Move these variables to another local file
 
 # Directory where hugo site is located
 export HUGO_SITE_DIR=~/Documents/MasonEsslinger
 # Address and path to website root on webserver
 export SITE_ROOT='masonxyz:/var/www/masonxyz'
-
 
 # JellyFin docker compose directory
 export JF_DC_DIR=/opt/jellyfin
@@ -37,26 +36,17 @@ alias grep='grep --color=auto'
 alias hgserver='hugo server -s $HUGO_SITE_DIR --noHTTPCache -D > /tmp/hugo.log 2>&1 &'
 
 # Push local website files to web server
-alias webpush='rsync -ru $HUGO_SITE_DIR/public/* masonxyz:/var/www/masonxyz'
+alias webpush='rsync -ru $HUGO_SITE_DIR/public/* $SITE_ROOT'
 
 # Run JellyFin docker image via docker compose
 alias jfrun='docker-compose --project-directory $JF_DC_DIR up'
 
 #############
 # Functions #
-############# 
+#############
 
-# Sync the /boot directory with the EFI partition to be able to bypass ZFSBootMenu
-syncboot() {
-	sudo rsync --exclude="*/" /boot/* /efi/ARCH
-}
-
-# Function for searching packages installed via pacman or aur
-searchpac() {
-	paru -Q | grep "$1"
-}
-
-# TODO: Move functions to their own folder
+#Import directory containing functions
+export FPATH=(~/.local/share/zfunctions $FPATH)
 
 ###########
 # Plugins #
