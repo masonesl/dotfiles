@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function install_pkgs() {
-	paru -S $1
+	paru -S $@
 }
 
 function link() {
@@ -14,9 +14,11 @@ SHELL_UTILS="zsh starship zsh-fast-syntax-highlighting zsh-vi-mode pfetch lsd ba
 paru -Syu || [ git clone https://git.archlinux.org/paru.git && \
 	cd paru && makepkg -Si && paru -Syu ] 
 
-install_pkgs($SHELL_UTILS)
+install_pkgs $SHELL_UTILS
 
 link zshenv ~/.zshenv
+
+mkdir --parents ~/.config/zsh
 link zshrc ~/.config/zsh/.zshrc
 
 mkdir --parents ~/.local/share
