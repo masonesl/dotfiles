@@ -11,10 +11,13 @@ function link() {
 
 SHELL_UTILS="zsh starship zsh-fast-syntax-highlighting zsh-vi-mode pfetch lsd bat"
 
-# paru -Syu || [ git clone https://git.archlinux.org/paru.git && \
-# 	cd paru && makepkg -Si && paru -Syu ] 
-# 
-# install_pkgs($SHELL_UTILS)
+paru -Syu || [ git clone https://git.archlinux.org/paru.git && \
+	cd paru && makepkg -Si && paru -Syu ] 
+
+install_pkgs($SHELL_UTILS)
 
 link zshenv ~/.zshenv
 link zshrc ~/.config/zsh/.zshrc
+
+mkdir --parents ~/.local/share
+link functions ~/.local/share/zfunctions
