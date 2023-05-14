@@ -23,3 +23,6 @@ link zshrc ~/.config/zsh/.zshrc
 
 mkdir --parents ~/.local/share
 link functions ~/.local/share/zfunctions
+
+mkdir --parents ~/.config/alacritty
+link alacritty.yml ~/.config/alacritty/alacritty.yml
