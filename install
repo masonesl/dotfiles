@@ -1,0 +1,20 @@
+#!/bin/bash
+
+function install_pkgs() {
+	paru -S $1
+}
+
+function link() {
+	SCRIPTPATH=$(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd -P)
+	ln --symbolic $SCRIPTPATH/$1 $2
+}
+
+SHELL_UTILS="zsh starship zsh-fast-syntax-highlighting zsh-vi-mode pfetch lsd bat"
+
+# paru -Syu || [ git clone https://git.archlinux.org/paru.git && \
+# 	cd paru && makepkg -Si && paru -Syu ] 
+# 
+# install_pkgs($SHELL_UTILS)
+
+link zshenv ~/.zshenv
+link zshrc ~/.config/zsh/.zshrc
