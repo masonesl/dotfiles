@@ -39,6 +39,7 @@ export FPATH=$FPATH:~/.local/share/zfunctions
 
 autoload searchpac
 autoload unknow
+autoload nv
 
 ###########
 # Plugins #
