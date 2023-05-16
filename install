@@ -1,28 +1,29 @@
 #!/bin/bash
 
+
+SCRIPTPATH=$(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)
+
 function install_pkgs() {
 	paru -S $@
 }
 
 function link() {
-	SCRIPTPATH=$(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd -P)
+	mkdir --parents $(dirname $2)
+
 	ln --symbolic $SCRIPTPATH/$1 $2
 }
 
 SHELL_UTILS="zsh starship zsh-fast-syntax-highlighting zsh-vi-mode pfetch lsd bat"
 
-paru -Syu || [ git clone https://git.archlinux.org/paru.git && \
-	cd paru && makepkg -Si && paru -Syu ] 
+# paru -Syu || [ git clone https://git.archlinux.org/paru.git && \
+# 	cd paru && makepkg -Si && paru -Syu ] 
+# 
+# install_pkgs $SHELL_UTILS
+# 
+# link zshenv ~/.zshenv
 
-install_pkgs $SHELL_UTILS
-
-link zshenv ~/.zshenv
-
-mkdir --parents ~/.config/zsh
 link zshrc ~/.config/zsh/.zshrc
 
-mkdir --parents ~/.local/share
 link functions ~/.local/share/zfunctions
 
-mkdir --parents ~/.config/alacritty
-link alacritty.yml ~/.config/alacritty/alacritty.yml
+link alacritty ~/.config/alacritty
