@@ -3,7 +3,9 @@
 SCRIPTPATH=$(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)
 
 function link() {
-	mkdir --parents $(dirname $2)
+	[ -e $2 ] && return
+
+	mkdir --parents $(dirname $1)
 
 	ln --symbolic $SCRIPTPATH/$1 $2
 }
