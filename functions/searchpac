@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 # Function for searching packages installed via pacman or aur
+
 searchpac() {
 	paru -Q | grep "$1"
 }
