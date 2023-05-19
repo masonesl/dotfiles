@@ -1,11 +1,6 @@
 #!/bin/bash
 
-
 SCRIPTPATH=$(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)
-
-function install_pkgs() {
-	paru -S $@
-}
 
 function link() {
 	mkdir --parents $(dirname $2)
@@ -13,17 +8,10 @@ function link() {
 	ln --symbolic $SCRIPTPATH/$1 $2
 }
 
-SHELL_UTILS="zsh starship zsh-fast-syntax-highlighting zsh-vi-mode pfetch lsd bat"
-
-# paru -Syu || [ git clone https://git.archlinux.org/paru.git && \
-# 	cd paru && makepkg -Si && paru -Syu ] 
-# 
-# install_pkgs $SHELL_UTILS
-# 
-# link zshenv ~/.zshenv
-
 link zshrc ~/.config/zsh/.zshrc
 
 link functions ~/.local/share/zfunctions
 
 link alacritty ~/.config/alacritty
+
+link neovim ~/.config/nvim
