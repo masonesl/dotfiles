@@ -19,4 +19,6 @@ return require('packer').startup(function(use)
     run = ':TSUpdate'
   }
 
+	use 'folke/tokyonight.nvim'
+
 end)
