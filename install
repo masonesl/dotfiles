@@ -2,7 +2,7 @@
 
 SCRIPTPATH=$(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)
 
-function link() {
+_link() {
 	[ -e $2 ] && return
 
 	mkdir --parents $(dirname $1)
@@ -10,10 +10,18 @@ function link() {
 	ln --symbolic $SCRIPTPATH/$1 $2
 }
 
-link zshrc ~/.config/zsh/.zshrc
+_check_missing() {
+	MISSING=$(pacman -Q $* 2>/dev/stdout 1>/dev/null | awk '{print $3}' | tr -d \')
+	
+	[ -z $MISSING ] || paru -S $(echo $MISSING)
+}
 
-link functions ~/.local/share/zfunctions
+_check_missing lsd starship pfetch-rs zsh-fast-syntax-highlighting zsh-vi-mode
+_link zsh ~/.config/zsh
+_link functions ~/.local/share/zfunctions
 
-link alacritty ~/.config/alacritty
+_check_missing alacritty
+_link alacritty ~/.config/alacritty
 
-link neovim ~/.config/nvim
+_check_missing nvim-packer-git
+_link neovim ~/.config/nvim
