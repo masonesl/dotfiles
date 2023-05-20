@@ -1,4 +1,4 @@
-# Symlink to ~/.zshrc
+# Symlink to ~/.config/zsh/.zshrc
 
 # Command history settings
 HISTFILE=~/.cache/zsh_histfile
