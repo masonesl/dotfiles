@@ -74,6 +74,11 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
+  ["nvim-colorizer.lua"] = {
+    loaded = true,
+    path = "/home/mason/.local/share/nvim/site/pack/packer/start/nvim-colorizer.lua",
+    url = "https://github.com/norcalli/nvim-colorizer.lua"
+  },
   ["nvim-treesitter"] = {
     loaded = true,
     path = "/home/mason/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
