@@ -22,4 +22,9 @@ return require('packer').startup(function(use)
 	use 'folke/tokyonight.nvim'
 
 	use 'norcalli/nvim-colorizer.lua'
+
+	use {
+		'christoomey/vim-tmux-navigator',
+		lazy=false,
+	}
 end)
