@@ -18,5 +18,6 @@ export NUGET_PACKAGES="$XDG_CACHE_HOME/NuGetPackages"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
 export PYTHONSTARTUP="${XDG_CONFIG_HOME}/python/pythonrc"
 export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 
 export EWW_CONFIG="$XDG_CONFIG_HOME/eww"
