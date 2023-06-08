@@ -30,6 +30,13 @@ alias jfrun='docker-compose --project-directory $JF_DC_DIR up'
 
 alias wget='wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'
 
+alias p="sudo pacman"
+
+alias sstrt="sudo systemctl start"
+alias sstop="sudo systemctl stop"
+alias senab="sudo systemctl enable"
+alias sdsbl="sudo systemctl disable"
+
 #############
 # Functions #
 #############
