@@ -51,6 +51,7 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+require('lspconfig').pyright.setup{}
 
 lsp.setup()
 
@@ -64,4 +65,10 @@ cmp.setup({
 		['<C-k>'] = cmp.mapping.select_prev_item(),
 	}
 })
+
+require('lualine').setup {
+	options = {
+		theme = require('lualine.themes.auto')
+	}
+}
 

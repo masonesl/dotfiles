@@ -14,20 +14,24 @@ return require('packer').startup(function(use)
     requires = { {'nvim-lua/plenary.nvim'} }
   }
 
+	-- Syntax highlighting
   use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate'
   }
 
+	-- Colorscheme
 	use 'folke/tokyonight.nvim'
 
+	-- Integrate with tmux
 	use 'norcalli/nvim-colorizer.lua'
 
 	use {
 		'christoomey/vim-tmux-navigator',
 		lazy=false,
 	}
-	
+
+	-- Automatic LSP setup and configuration
 	use {
 		'VonHeikemen/lsp-zero.nvim',
 		branch = 'v2.x',
@@ -47,6 +51,11 @@ return require('packer').startup(function(use)
 			{'hrsh7th/cmp-nvim-lsp'}, -- Required
 			{'L3MON4D3/LuaSnip'},     -- Required
 		}
+	}
+
+	use {
+		'nvim-lualine/lualine.nvim',
+		requires = { 'nvim-tree/nvim-web-devicons', opt = true }
 	}
 
 end)
