@@ -1,0 +1,199 @@
+
+* {
+    font: "Roboto Mono Font Bold 12";
+}
+
+
+configuration {
+	modi: "drun,window";
+	display-drun: "󱓞";
+	display-window: "";
+	modes: "drun,window";
+	drun-display-format: "{name}";
+
+}
+
+window {
+    transparency:                "real";
+    location:                    center;
+    anchor:                      center;
+    fullscreen:                  false;
+    width:                       600px;
+		height:											 300px;
+    x-offset:                    0px;
+    y-offset:                    0px;
+
+    enabled:                     true;
+    margin:                      0px;
+    padding:                     0px;
+    border:                      0px solid;
+    border-radius:               10px;
+    border-color:                Black;
+    cursor:                      "default";
+		background-color:						 #1a1b26a0;
+
+}
+
+mainbox {
+    enabled:                     true;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     30px;
+    border:                      0px solid;
+    border-radius:               0px 0px 0px 0px;
+    border-color:                Red;
+    background-color:            transparent;
+    children:                    [ "inputbar", "message", "listview" ];
+}
+
+inputbar {
+    enabled:                     true;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     0px;
+    border:                      0px solid;
+    border-radius:               0px;
+    border-color:                Red;
+    background-color:            transparent;
+    text-color:                  #a9b1d6;
+    children:                    [ "textbox-prompt-colon", "entry", "mode-switcher"];
+}
+
+textbox-prompt-colon {
+    enabled:                     true;
+    padding:                     5px 0px;
+    expand:                      false;
+    str:                         "󰣇";
+    background-color:            inherit;
+    text-color:                  #7da6ff;
+}
+
+entry {
+    enabled:                     true;
+    padding:                     5px 0px;
+    background-color:            inherit;
+    text-color:                  #a9b1d6;
+    cursor:                      text;
+    placeholder:                 "Search...";
+    placeholder-color:           inherit;
+}
+
+listview {
+    enabled:                     true;
+    columns:                     1;
+    lines:                       3;
+    cycle:                       true;
+    dynamic:                     true;
+    scrollbar:                   true;
+    layout:                      vertical;
+    reverse:                     false;
+    fixed-height:                true;
+    fixed-columns:               true;
+    
+    spacing:                     5px;
+    margin:                      0px;
+    padding:                     0px;
+    border:                      0px solid;
+    border-radius:               0px;
+    border-color:                Black;
+    background-color:            transparent;
+    text-color:                  #a9b1d6;
+    cursor:                      "default";
+}
+
+scrollbar {
+    handle-width:                5px ;
+    handle-color:                #32344a;
+    border-radius:               10px;
+    background-color:            #787c99;
+}
+
+element {
+    enabled:                     true;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     5px 10px;
+    border:                      0px solid;
+    border-radius:               10px;
+    border-color:                Black;
+    background-color:            transparent;
+    text-color:                  #a9b1d6;
+    cursor:                      pointer;
+}
+
+element normal.normal {
+    background-color:            #32344a;
+    text-color:                  #a9b1d6;
+}
+element normal.urgent {
+    background-color:            #ff7a93;
+    text-color:                  #32344a;
+}
+element normal.active {
+    background-color:            #bb9af7;
+    text-color:                  #32344a;
+}
+element selected.normal {
+    background-color:            #7da6ff;
+    text-color:                  #32344a;
+}
+element selected.urgent {
+    background-color:            #f7768e;
+    text-color:                  #32344a;
+}
+element selected.active {
+    background-color:            #ad8ee6;
+    text-color:                  #32344a;
+}
+element alternate.normal {
+    background-color:            #32344a;
+    text-color:                  #a9b1d6;
+}
+element alternate.urgent {
+    background-color:            #ff7a93;
+    text-color:                  #32344a;
+}
+element alternate.active {
+    background-color:            #bb9af7;
+    text-color:                  #32344a;
+}
+element-icon {
+    background-color:            transparent;
+    text-color:                  inherit;
+    size:                        24px;
+    cursor:                      inherit;
+}
+element-text {
+    background-color:            transparent;
+    text-color:                  inherit;
+    highlight:                   inherit;
+    cursor:                      inherit;
+    vertical-align:              0.5;
+    horizontal-align:            0.0;
+}
+
+mode-switcher{
+    enabled:                     true;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     0px;
+    border:                      0px solid;
+    border-radius:               0px;
+    border-color:                Black;
+    background-color:            transparent;
+    text-color:                  #1a1b26;
+}
+button {
+    padding:                     5px 15px 5px 10px;
+    border:                      0px solid;
+    border-radius:               10px;
+    border-color:                Black;
+    background-color:            #acb0d0;
+    text-color:                  inherit;
+    cursor:                      pointer;
+}
+button selected {
+    background-color:            #ff7a93;
+    text-color:                  #1a1b26;
+}
+
