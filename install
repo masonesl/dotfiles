@@ -29,3 +29,5 @@ _link nvim ~/.config/nvim/lua/custom
 
 _ensure_installed hyprland hyprpaper
 _link hypr ~/.config/hypr
+
+_link rofi ~/.config/rofi
