@@ -14,16 +14,24 @@ DIR=$(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)
 
 # CMDs
 uptime="`uptime -p | sed -e 's/up //g'`"
-host=`hostname`
+host=`cat /etc/hostname`
 
 # Options
-shutdown=' Shutdown'
-reboot=' Reboot'
-lock=' Lock'
-suspend=' Suspend'
-logout=' Logout'
-yes=' Yes'
-no=' No'
+# shutdown=' Shutdown'
+# reboot=' Reboot'
+# lock=' Lock'
+# suspend=' Suspend'
+# logout=' Logout'
+# yes=' Yes'
+# no=' No'
+
+shutdown='Shutdown'
+reboot='Reboot'
+lock='Lock'
+suspend='Suspend'
+logout='Logout'
+yes='Yes'
+no='No'
 
 # Rofi CMD
 rofi_cmd() {
@@ -48,12 +56,12 @@ confirm_cmd() {
 
 # Ask for confirmation
 confirm_exit() {
-	echo "$yes\n$no" | confirm_cmd
+	echo -e "$yes\n$no" | confirm_cmd
 }
 
 # Pass variables to rofi dmenu
 run_rofi() {
-	echo "$lock\n$suspend\n$logout\n$reboot\n$shutdown" | rofi_cmd
+	echo -e "$lock\n$suspend\n$logout\n$reboot\n$shutdown" | rofi_cmd
 }
 
 run_cmd() {
