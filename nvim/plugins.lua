@@ -5,6 +5,10 @@ local plugins = {
       require('plugins.configs.lspconfig')
       require('custom.configs.lspconfig')
     end
+  },
+  {
+    'elkowar/yuck.vim',
+    lazy = false
   }
 }
 
