@@ -1,0 +1,26 @@
+(defpoll network-status
+	:initial "Unavailable"
+	:interval "10s"
+	"sh $EWW_CONFIG/scripts/network status")
+
+(defpoll network-strength
+	:initial 0
+	:interval "10s"
+	:run-while {network-status == "Wireless"}
+	"sh $EWW_CONFIG/scripts/network strength")
+
+(defwidget network-status []
+	(eventbox
+		:class "network-status"
+		(label
+			:class "network-icon"
+			:text "${network-status == "Wired" ? "󰈀" :
+							"${network-status == "Wireless" ?
+								"${network-strength > 75 ? "󰤨" :
+								"${network-strength > 50 ? "󰤥" :
+								"${network-strength > 25 ? "󰤢" :
+								"${network-strength >  0 ? "󰤟" : "󰤯"}"}"}"}" :
+							"󰪎"}"}"
+			)
+		)
+	)

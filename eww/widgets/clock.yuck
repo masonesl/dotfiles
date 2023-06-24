@@ -1,0 +1,17 @@
+(defpoll clock-time
+  :interval "5s"
+  "date +' %I%n%n %M'"
+  )
+
+(defwidget clock-section []
+  (eventbox
+    :class "clock-section"
+    :halign "center"
+    :valign "center"
+    (label
+      :class "clock-time"
+      :text clock-time
+      )
+    )
+  )
+

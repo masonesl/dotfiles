@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -xeu
+
+~/.local/share/scripts/brightness update-eww
+~/.local/share/scripts/volume update-eww
+

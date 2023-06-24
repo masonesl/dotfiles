@@ -1,0 +1,40 @@
+(defwidget osd-box [class value icon]
+	(eventbox
+		:onhover "eww update osd-timeout-hold=true"
+		:onhoverlost "sh $EWW_CONFIG/scripts/osd-timeout reset"
+
+		(box
+			:class "osd-box"
+
+			(overlay
+				(circular-progress
+					:class "${class}-circle"
+					:value value
+					:start-at 75
+					:thickness 20
+
+					(box
+						:orientation "v"
+						:space-evenly false
+						:valign "center"
+
+						(label
+							:class "osd-${class}-icon"
+							:text icon)
+
+						(label
+							:class "osd-${class}-text"
+							:text value))))
+
+			(label
+				:visible false
+				:text "${osd-timeout}"))))
+
+
+(defvar osd-timeout-hold false)
+
+(defpoll osd-timeout
+	:run-while {osd-timeout-hold != true}
+	:initial 3
+	:interval "1s"
+	"sh $EWW_CONFIG/scripts/osd-timeout poll")

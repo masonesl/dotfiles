@@ -1,0 +1,17 @@
+(defwindow volume-osd
+	:monitor 0
+	:stacking "fg"
+	:wm-ignore false
+	:exclusive false
+	:geometry (geometry
+		:anchor "center top"
+		:y "10%"
+		:width "9%"
+		:height "16%"
+		)
+	
+	(osd-box
+		:class "volume"
+		:value volume-system
+		:icon {volume-system != 0 ? "󰕾" : "󰸈"}))
+

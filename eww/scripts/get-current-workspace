@@ -1,0 +1,7 @@
+#!/bin/sh
+
+. $(dirname $0)/listen
+
+hyprctl monitors -j | jq --raw-output '.[0].activeWorkspace.id'
+
+listen | stdbuf -o0 awk -F '>>|,' '/^workspace>>/{print $2}'

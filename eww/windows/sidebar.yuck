@@ -1,0 +1,48 @@
+(defwindow sidebar
+  :monitor 0
+  :stacking "fg"
+  :wm-ignore false
+  :exclusive true
+  :geometry (geometry
+              :anchor "center left"
+              :x "0%"
+              :y "0%"
+              :width "42px"
+              :height "100%"
+              )
+	(centerbox
+		:orientation "v"
+		(top-section)
+		(clock-section)
+		(bottom-section)
+		)
+	)
+
+	(defwidget top-section []
+		(box
+			:class "top-section"
+			:orientation "v"
+			:valign "start"
+			:space-evenly false
+			(arch-button)
+			(workspaces-section
+				:orientation "v"
+				:valign "start"
+				:halign "center"
+				:class "side"
+				)
+			)
+		)
+
+(defwidget bottom-section []
+	(box
+		:class "bottom-section"
+		:orientation "v"
+		:valign "end"
+		:space-evenly false
+		(network-status)
+		(battery-indicator)
+		(volume-indicator)
+		(brightness-indicator)
+		)
+	)

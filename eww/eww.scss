@@ -1,0 +1,112 @@
+* {
+	all: unset;
+}
+
+.topbar {
+	background-color: #222324;
+	color: #bababa;
+	opacity: 0.9;
+	font: 14px "Roboto Mono";
+}
+
+.sidebar {
+	background-color: #1a1b26;
+	color: #a9b1d6;
+	font: 20px "Roboto Mono";
+}
+
+.top-section {
+	margin: 5px 6px 5px 4px;
+}
+
+.arch-button:hover {
+	color: #7aa2f7;
+}
+
+.arch-button-text {
+	font: 20px "FiraCode Nerd Font";
+	padding: 0px 5px 0px 2px;
+	margin: 3px;
+}
+
+.workspace-text {
+	font: 18px "FiraCode Nerd Font";
+	margin: 2px 4px 2px 2px;
+}
+
+.workspace-button:hover {
+	color: #768da3;	
+}
+
+.current-workspace {
+	color: #7aa2f7;
+}
+
+.workspaces-section {
+	background-color: #32344a;
+	border-radius: 8px;
+}
+
+.clock-section {
+	font: 20px "Roboto Mono Bold";
+	font-weight: 700;
+	margin: 3px;
+
+	& .clock-time {
+		padding: 3px;
+		margin: 0px 6px 0px 0px;
+	}
+}
+
+.bottom-section {
+	background-color: #32344a;
+	border-radius: 8px;
+	margin: 5px;
+}
+
+.battery-icon {
+	font: 18px "FiraCode Nerd Font";
+	margin: 2px 3px;
+}
+
+.volume-icon {
+	font: 18px "FiraCode Nerd Font";
+	margin: 2px 3px;
+}
+
+.brightness-icon {
+	font: 18px "FiraCode Nerd Font";
+	margin: 2px 3px 2px 0px;
+}
+
+.network-icon {
+	font: 18px "FiraCode Nerd Font";
+	margin: 2px 6px 2px 0px;
+}
+
+.volume-osd, .brightness-osd {
+	border-radius: 20px;
+	background-color: rgba(#32344a, 0.9);
+	opacity: 0.9;
+}
+
+.osd-box {
+	font: 20px "Roboto";
+	margin: 20px;
+}
+
+.volume-circle {
+	color: #bb9af7;
+}
+
+.brightness-circle {
+	color: #ff9e64;
+}
+
+.osd-volume-icon {
+
+}
+
+.volume-text {
+}
+

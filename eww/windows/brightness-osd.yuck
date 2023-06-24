@@ -1,0 +1,17 @@
+(defwindow brightness-osd
+	:monitor 0
+	:stacking "overlay"
+	:wm-ignore false
+	:exclusive false
+	:geometry (geometry
+		:anchor "center top"
+		:y "10%"
+		:width "9%"
+		:height "16%"
+		)
+	
+	(osd-box
+		:class "brightness"
+		:value brightness
+		:icon "󰃠"))
+

@@ -1,0 +1,14 @@
+(defvar volume-system 0)
+
+(defwidget volume-indicator []
+	(eventbox
+		:class "volume-indicator"
+		(label
+			:class "volume-icon"
+			:text "${volume-system > 66 ? "󰕾" : 
+						"${volume-system > 33 ? "󰖀" : 
+						"${volume-system > 0 ? "󰕿" : "󰸈"}"}"}"
+			)
+			)
+		)
+	

@@ -1,0 +1,45 @@
+(defvar media-current-player "")
+(defvar media-player-status "Stopped")
+
+(defwidget media-section []
+  (box
+    :class "media-section"
+    :halign "start"
+    :valign "center"
+    (box
+      :class "media-symbol"
+      (label
+        :class "${media-current-player == "spotify" ? "spotify-player" : 
+               "${media-current-player == "firefox" ? "firefox-player" : 
+               "no-current"}"}"
+        :text "${media-current-player == "spotify" ? "󰓇" : 
+              "${media-current-player == "firefox" ? "󰈹" : 
+              "󰣇"}"}"
+        )
+      )
+    (box
+      :class "media-buttons"
+      (button
+        :class "media-button media-previous"
+        :onclick "sh ~/.local/share/scripts/media previous"
+        (label
+          :text "󰼨"
+          )
+        )
+      (eventbox
+        :class "media-button media-play-pause"
+        :onclick "sh ~/.local/share/scripts/media play-pause"
+        (label
+          :text "${media-player-status == "Playing" ? "" : ""}"
+          )
+        )
+      (eventbox
+        :class "media-button media-next"
+        :onclick "sh ~/.local/share/scripts/media next"
+        (label
+          :text "󰼧"
+          )
+        )
+      )
+    )
+  )

@@ -1,0 +1,45 @@
+(deflisten workspaces-current
+  :initial "1"
+  "sh $EWW_CONFIG/scripts/get-current-workspace"
+  )
+
+(deflisten workspaces-active
+  :initial "[]"
+  "sh $EWW_CONFIG/scripts/get-workspaces"
+  )
+
+(defwidget workspace-button [workspace]
+  (eventbox
+    :class "workspace-button 
+           ${workspace.id == workspaces-current ? "current-workspace" : ""} 
+           ${workspace.windows > 0 ? "active-workspace" : "empty-workspace"}"
+
+    :onclick "hyprctl dispatch workspace ${workspace.id}"
+
+    (label
+      :class "workspace-text"
+
+      :text "${workspace.id == workspaces-current ? "" :
+            "${workspace.windows > 0 ? "" : ""}"}"
+      )
+    )
+  )
+
+(defwidget workspaces-section [orientation valign halign class]
+  (box
+    :class "workspaces-section ${class}"
+    :orientation orientation
+    :valign valign
+
+    (label
+      :visible false
+      :text workspaces-current
+      )
+
+    (for workspace in workspaces-active
+      (workspace-button
+        :workspace workspace
+        )
+      )
+    )
+  )
