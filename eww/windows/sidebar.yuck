@@ -41,8 +41,6 @@
 		:valign "end"
 		:space-evenly false
 		(network-status)
-		(battery-indicator)
 		(volume-indicator)
-		(brightness-indicator)
 		)
 	)

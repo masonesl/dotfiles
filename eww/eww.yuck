@@ -1,16 +1,14 @@
-;; Sidebar config
-(include "./windows/sidebar.yuck")
+;; Windows
+(include "./windows/topbar.yuck")
+(include "./windows/volume-osd.yuck")
+
+;; Widgets
 (include "./widgets/workspaces.yuck")
 (include "./widgets/clock.yuck")
 (include "./widgets/media.yuck")
 (include "./widgets/arch-button.yuck")
 (include "./widgets/volume.yuck")
-(include "./widgets/brightness.yuck")
-(include "./widgets/battery.yuck")
 (include "./widgets/network.yuck")
-(include "./windows/volume-osd.yuck")
 (include "./widgets/osd.yuck")
-(include "./windows/brightness-osd.yuck")
-
 
 
