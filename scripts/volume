@@ -1,0 +1,85 @@
+#!/bin/sh
+
+VOLUME_INCREMENT=2
+
+_update_eww () {
+	# Update eww with new volume and show volume osd
+
+	eww ping > /dev/null 2>&1 && eww update volume-system=$1 &
+
+	# Close any open osd overlays and start volume osd
+	eww close $(eww windows | grep -oP "\*\K(.*-osd)" | grep -v volume-osd)
+	eww open volume-osd
+	echo 3 > /tmp/osd.timeout
+}
+
+_check_mute () {
+	# Check mute status and exit with code 0 if not muted
+
+	STATUS=$(pactl get-sink-mute @DEFAULT_SINK@ | \
+		awk '{print $2}')
+
+	[ "$STATUS" = "no" ]
+}
+
+_toggle_mute () {
+	# Change mute status
+
+	VOL=0
+	_check_mute || VOL=$(_get_volume)
+
+	pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+	_update_eww $VOL
+}
+
+_get_volume () {
+	# Return volume
+
+	pactl get-sink-volume @DEFAULT_SINK@ | \
+		grep Volume | awk '{print $5}' | tr '%' ' '
+}
+
+_set_volume () {
+	# Set volume
+
+	# If muted, unmute
+	_check_mute || _toggle_mute
+
+	pactl set-sink-volume @DEFAULT_SINK@ $1%
+
+	_update_eww $1
+}
+
+_adjust_volume () {
+	# Adjust volume by set increment
+	
+	# If muted, unmute
+	_check_mute || _toggle_mute
+
+	CURRENT_VOLUME=$(_get_volume)
+
+	if [ $1 = "down" ] && [ $CURRENT_VOLUME -gt 0 ]
+	then
+		_set_volume $(($CURRENT_VOLUME - $VOLUME_INCREMENT))
+	elif [ $1 = "up" ] && [ $CURRENT_VOLUME -lt 100 ]
+	then
+		_set_volume $(($CURRENT_VOLUME + $VOLUME_INCREMENT))
+	else
+		_update_eww $CURRENT_VOLUME
+	fi
+}
+
+[ "$1" = "get" ] && _get_volume
+[ "$1" = "set" ] && _set_volume $2
+[ "$1" = "adjust" ] && _adjust_volume $2
+[ "$1" = "toggle-mute" ] && _toggle_mute
+[ "$1" = "update-eww" ] && _update_eww $(_get_volume)
+
+[ -n "$1" ] || echo \
+"Subcommands:\n \
+	get\n \
+	set [vol]\n \
+	adjust [up|down]\n \
+	toggle-mute\n \
+	update-eww"

@@ -1,0 +1,43 @@
+#!/bin/sh
+
+BRIGHTNESS_INCREMENT=5
+
+_get_max () {
+	echo $(brightnessctl max)
+}
+
+_update_eww () {
+	eww ping > /dev/null 2>&1 && \
+		eww update brightness=$(($1 * 100 / $(_get_max)))
+
+	eww close $(eww windows | grep -oP "\*\K(.*-osd)" | grep -v brightness-osd)
+	eww open brightness-osd
+	echo 3 > /tmp/osd.timeout
+}
+
+_set_brightness () {
+	brightnessctl set $1
+
+	_update_eww $1
+}
+
+_adjust_brightness () {
+	CURRENT_BRIGHTNESS=$(brightnessctl get)
+
+	[ $1 = "down" ] && [ $CURRENT_BRIGHTNESS -gt 0 ] && \
+		_set_brightness \
+		$(($CURRENT_BRIGHTNESS - $BRIGHTNESS_INCREMENT))
+	[ $1 = "up" ] && [ $CURRENT_BRIGHTNESS -lt 255 ] && \
+		_set_brightness \
+		$(($CURRENT_BRIGHTNESS + $BRIGHTNESS_INCREMENT))
+}
+
+[ "$1" = "set" ] && _set_brightness $2
+[ "$1" = "adjust" ] && _adjust_brightness $2
+[ "$1" = "update-eww" ] && _update_eww $(brightnessctl get)
+
+[ -n "$1" ] || echo \
+"Subcommands:
+	set [brightness]\n \
+	adjust [up|down]\n \
+	update-eww"
