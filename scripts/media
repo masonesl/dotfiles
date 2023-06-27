@@ -1,0 +1,30 @@
+#!/bin/sh
+
+update_eww() {
+	PLAYER_STATUS=$(playerctl status)
+	CURRENT_PLAYER=$(playerctl metadata | grep -m1 -oP '\K(firefox|spotify)' | head -1)
+
+	eww ping > /dev/null 2>&1 && \
+		eww update media-current-player="$CURRENT_PLAYER" ;
+		eww update media-player-status="$PLAYER_STATUS" &
+}
+
+_player() {
+	[ -z "$2" ] && \
+		playerctl "$1" && \
+		return
+
+	[ "$2" = "all" ] && \
+		playerctl --all-players "$1" && \
+		return
+
+	playerctl --player="$2" "$1"
+}
+
+[ "$1" = "play-pause" ] || \
+	[ "$1" = "next" ] || \
+	[ "$1" = "previous" ] && \
+	_player "$1" "$2"
+
+# sleep 0.05
+# update_eww $2
