@@ -37,6 +37,8 @@ alias sstop="sudo systemctl stop"
 alias senab="sudo systemctl enable"
 alias sdsbl="sudo systemctl disable"
 
+alias bash="HOME=$HOME/.local/share/fakehome bash"
+
 #############
 # Functions #
 #############
