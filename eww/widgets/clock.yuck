@@ -1,6 +1,6 @@
 (defpoll clock-time
   :interval "5s"
-  "date +'%I  %M'"
+  "date +'%I %M   %b %d'"
   )
 
 (defwidget clock-section []

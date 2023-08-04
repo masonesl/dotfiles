@@ -14,7 +14,7 @@
            ${workspace.id == workspaces-current-pri || workspace.id == workspaces-current-sec ? "current-workspace" : ""} 
            ${workspace.windows > 0 ? "active-workspace" : "empty-workspace"}"
 
-    :onclick "hyprctl dispatch split-workspace ${workspace.id}"
+    :onclick "hyprctl dispatch workspace ${workspace.id}"
 
     (label
       :class "workspace-text"
