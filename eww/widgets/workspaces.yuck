@@ -4,7 +4,7 @@
   )
 
 (deflisten workspaces-current-sec
-  :initial "1"
+  :initial "11"
   "sh $XDG_CONFIG_HOME/eww/scripts/get-current-workspace 11 20"
   )
 
