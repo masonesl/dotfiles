@@ -2,13 +2,8 @@
 	all: unset;
 }
 
-.topbar {
-	background-color: #222324;
-	color: #bababa;
-	opacity: 0.9;
-	font: 14px "Roboto Mono";
-}
-
+.topbar-pri,
+.topbar-sec,
 .sidebar {
 	background-color: #1a1b26;
 	color: #a9b1d6;
@@ -19,23 +14,14 @@
 	margin: 5px 6px 5px 4px;
 }
 
-.arch-button:hover {
-	color: #7aa2f7;
-}
-
-.arch-button-text {
-	font: 20px "FiraCode Nerd Font";
-	padding: 0px 5px 0px 2px;
-	margin: 3px;
-}
-
 .workspace-text {
 	font: 18px "FiraCode Nerd Font";
-	margin: 2px 4px 2px 2px;
+  margin: 0px 5px 0px 2px;
+  padding: 1px 4px;
 }
 
 .workspace-button:hover {
-	color: #768da3;	
+	color: #bb9af7;
 }
 
 .current-workspace {
@@ -43,8 +29,9 @@
 }
 
 .workspaces-section {
-	background-color: #32344a;
+	background-color: #40486a;
 	border-radius: 8px;
+  margin: 0px 5px;
 }
 
 .clock-section {

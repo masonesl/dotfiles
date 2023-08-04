@@ -1,17 +1,17 @@
-(deflisten workspaces-current
+(deflisten workspaces-current-pri
   :initial "1"
-  "sh $EWW_CONFIG/scripts/get-current-workspace"
+  "sh $XDG_CONFIG_HOME/eww/scripts/get-current-workspace 1 10"
   )
 
-(deflisten workspaces-active
-  :initial "[]"
-  "sh $EWW_CONFIG/scripts/get-workspaces"
+(deflisten workspaces-current-sec
+  :initial "1"
+  "sh $XDG_CONFIG_HOME/eww/scripts/get-current-workspace 11 20"
   )
 
 (defwidget workspace-button [workspace]
   (eventbox
     :class "workspace-button 
-           ${workspace.id == workspaces-current ? "current-workspace" : ""} 
+           ${workspace.id == workspaces-current-pri || workspace.id == workspaces-current-sec ? "current-workspace" : ""} 
            ${workspace.windows > 0 ? "active-workspace" : "empty-workspace"}"
 
     :onclick "hyprctl dispatch workspace ${workspace.id}"
@@ -19,21 +19,22 @@
     (label
       :class "workspace-text"
 
-      :text "${workspace.id == workspaces-current ? "" :
+      :text "${workspace.id == workspaces-current-pri || workspace.id == workspaces-current-sec ? "" :
             "${workspace.windows > 0 ? "" : ""}"}"
       )
     )
   )
 
-(defwidget workspaces-section [orientation valign halign class]
+(defwidget workspaces-section [orientation valign halign class workspaces-active]
   (box
     :class "workspaces-section ${class}"
     :orientation orientation
     :valign valign
+    :halign halign
 
     (label
       :visible false
-      :text workspaces-current
+      :text "${workspaces-current-pri} ${workspaces-current-sec}"
       )
 
     (for workspace in workspaces-active

@@ -1,3 +1,6 @@
 [submodule "nvchad"]
 	path = nvchad
 	url = https://github.com/NvChad/NvChad.git
+[submodule "tpm"]
+  path = tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm.git

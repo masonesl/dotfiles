@@ -35,3 +35,6 @@ _link rofi ~/.config/rofi
 _link eww ~/.config/eww
 
 _link scripts ~/.local/share/scripts
+
+_ensure_installed tmux
+_link tmux ~/.config/tmux
