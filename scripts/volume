@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VOLUME_INCREMENT=2
+VOLUME_INCREMENT=0.02
 
 _update_eww () {
 	# Update eww with new volume and show volume osd
@@ -16,10 +16,10 @@ _update_eww () {
 _check_mute () {
 	# Check mute status and exit with code 0 if not muted
 
-	STATUS=$(pactl get-sink-mute @DEFAULT_SINK@ | \
-		awk '{print $2}')
+	STATUS=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | \
+		awk '{print $3}')
 
-	[ "$STATUS" = "no" ]
+	[ "$STATUS" != "[MUTED]" ]
 }
 
 _toggle_mute () {
@@ -28,7 +28,7 @@ _toggle_mute () {
 	VOL=0
 	_check_mute || VOL=$(_get_volume)
 
-	pactl set-sink-mute @DEFAULT_SINK@ toggle
+	wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 
 	_update_eww $VOL
 }
@@ -36,8 +36,8 @@ _toggle_mute () {
 _get_volume () {
 	# Return volume
 
-	pactl get-sink-volume @DEFAULT_SINK@ | \
-		grep Volume | awk '{print $5}' | tr '%' ' '
+  wpctl get-volume @DEFAULT_AUDIO_SINK@ | \
+    awk '{print $2 * 100}'
 }
 
 _set_volume () {
@@ -46,7 +46,7 @@ _set_volume () {
 	# If muted, unmute
 	_check_mute || _toggle_mute
 
-	pactl set-sink-volume @DEFAULT_SINK@ $1%
+  wpctl set-volume @DEFAULT_AUDIO_SINK@ $1 --limit 1
 
 	_update_eww $1
 }
@@ -57,17 +57,14 @@ _adjust_volume () {
 	# If muted, unmute
 	_check_mute || _toggle_mute
 
-	CURRENT_VOLUME=$(_get_volume)
-
-	if [ $1 = "down" ] && [ $CURRENT_VOLUME -gt 0 ]
+	if [ $1 = "down" ]
 	then
-		_set_volume $(($CURRENT_VOLUME - $VOLUME_INCREMENT))
-	elif [ $1 = "up" ] && [ $CURRENT_VOLUME -lt 100 ]
+    wpctl set-volume @DEFAULT_AUDIO_SINK@ $VOLUME_INCREMENT- --limit 1
+	elif [ $1 = "up" ]
 	then
-		_set_volume $(($CURRENT_VOLUME + $VOLUME_INCREMENT))
-	else
-		_update_eww $CURRENT_VOLUME
+    wpctl set-volume @DEFAULT_AUDIO_SINK@ $VOLUME_INCREMENT+ --limit 1
 	fi
+  _update_eww $(_get_volume)
 }
 
 [ "$1" = "get" ] && _get_volume
