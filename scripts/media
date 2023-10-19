@@ -10,15 +10,16 @@ update_eww() {
 }
 
 _player() {
-	[ -z "$2" ] && \
-		playerctl "$1" && \
-		return
-
-	[ "$2" = "all" ] && \
-		playerctl --all-players "$1" && \
-		return
-
-	playerctl --player="$2" "$1"
+  if [ -z "$2" ]
+  then
+    (playerctl "$1" --player=spotify) || \
+      (playerctl "$1" --player=firefox)
+  elif [ "$2" = "all" ]
+  then
+		playerctl --all-players "$1"
+  else
+	  playerctl --player="$2" "$1"
+  fi
 }
 
 [ "$1" = "play-pause" ] || \
