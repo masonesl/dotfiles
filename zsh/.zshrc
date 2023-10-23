@@ -25,17 +25,11 @@ alias lla='ls -lha'
 
 alias grep='grep --color=auto'
 
-# Run JellyFin docker image via docker compose
-alias jfrun='docker-compose --project-directory $JF_DC_DIR up'
-
 alias wget='wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'
 
-alias p="sudo pacman"
+alias p='pacman'
 
-alias sstrt="sudo systemctl start"
-alias sstop="sudo systemctl stop"
-alias senab="sudo systemctl enable"
-alias sdsbl="sudo systemctl disable"
+alias s='sudo'
 
 alias bash="HOME=$HOME/.local/share/fakehome bash"
 
