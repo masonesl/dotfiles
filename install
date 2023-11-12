@@ -38,3 +38,7 @@ _link scripts ~/.local/share/scripts
 
 _ensure_installed tmux
 _link tmux ~/.config/tmux
+
+_ensure_installed swayidle swaylock-effects-git
+_link swaylock ~/.config/swaylock
+_link swayidle ~/.config/swayidle
