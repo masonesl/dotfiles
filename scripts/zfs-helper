@@ -1,0 +1,35 @@
+#!/bin/sh
+
+IMPORT_ZPOOL="Import Pool"
+MOUNT_DATASET="Mount Dataset"
+LOAD_KEY="Load Key"
+
+MODE=$(printf "$IMPORT_ZPOOL\n$MOUNT_DATASET\n$LOAD_KEY" | rofi -dmenu)
+
+while !( sudo -n uptime )
+do
+  rofi -password -dmenu | sudo -S uptime > /dev/null
+done
+
+case "$MODE" in
+  "$IMPORT_ZPOOL")
+    POOLS=$(sudo zpool import | awk '/pool: / {print $2}')
+    SELECTED=$(printf "$POOLS" | rofi -dmenu)
+    sudo zpool import $SELECTED
+    ;;
+  "$MOUNT_DATASET")
+    DATASETS=$(sudo zfs list | tail -n +2 | awk '{print $1}')
+    SELECTED=$(printf "$DATASETS" | rofi -dmenu)
+    sudo zfs mount $SELECTED
+    ;;
+  "$LOAD_KEY")
+    DATASETS=$(sudo zfs list | tail -n +2 | awk '{print $1}')
+    SELECTED=$(printf "$DATASETS" | rofi -dmenu)
+    rofi -password -dmenu | sudo zfs load-key $SELECTED
+esac
+    
+
+
+
+
+
