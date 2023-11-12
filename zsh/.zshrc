@@ -5,6 +5,8 @@ HISTFILE=~/.cache/zsh_histfile
 HISTSIZE=10000
 SAVEHIST=10000
 
+export PATH=$PATH:~/.local/share/scripts/
+
 #############
 # Variables #
 #############
@@ -18,18 +20,26 @@ export JF_DC_DIR=/opt/jellyfin
 # Aliases #
 ###########
 
-alias ls='lsd'
-alias ll='ls -lh'
-alias la='ls -a'
-alias lla='ls -lha'
+alias l='lsd'
+alias ll='lsd -lh'
+alias la='lsd -a'
+alias lla='lsd -lha'
 
 alias grep='grep --color=auto'
 
 alias wget='wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'
 
 alias p='pacman'
+alias s='sudo '
+alias n='nvim'
+alias c='cd'
 
-alias s='sudo'
+alias g='git'
+alias ga='git add'
+alias gc='git commit -m'
+alias gp='git push'
+
+alias h='history 1 | grep'
 
 alias bash="HOME=$HOME/.local/share/fakehome bash"
 
