@@ -5,31 +5,20 @@
 
 		(box
 			:class "osd-box"
-
-			(overlay
-				(circular-progress
-					:class "${class}-circle"
-					:value value
-					:start-at 75
-					:thickness 20
-
-					(box
-						:orientation "v"
-						:space-evenly false
-						:valign "center"
-
-						(label
-							:class "osd-${class}-icon"
-							:text icon)
-
-						(label
-							:class "osd-${class}-text"
-							:text value))))
+      (overlay
+        (scale 
+          :class "${class}-bar"
+          :value value
+          :onchange "sh $HOME/.local/share/scripts/volume set {}"
+          :orientation "horizontal")
+        (label
+          :class "osd-${class}-icon"
+          :halign "start"
+          :text icon))
 
 			(label
 				:visible false
 				:text "${osd-timeout}"))))
-
 
 (defvar osd-timeout-hold false)
 
