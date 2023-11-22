@@ -9,7 +9,8 @@ _update_eww () {
 
 	# Close any open osd overlays and start volume osd
 	eww close $(eww windows | grep -oP "\*\K(.*-osd)" | grep -v volume-osd)
-	eww open volume-osd
+	eww open volume-osd-pri
+  eww open volume-osd-sec 2> /dev/null
 	echo 3 > /tmp/osd.timeout
 }
 
@@ -46,7 +47,7 @@ _set_volume () {
 	# If muted, unmute
 	_check_mute || _toggle_mute
 
-  wpctl set-volume @DEFAULT_AUDIO_SINK@ $1 --limit 1
+  wpctl set-volume @DEFAULT_AUDIO_SINK@ $(echo $1 | awk '{print $1 / 100}') --limit 1
 
 	_update_eww $1
 }
