@@ -5,7 +5,7 @@ _poll () {
 
 	if [ "$TIMEOUT" -le 0 ]
 	then
-		eww close $(eww windows | grep -oP "\*\K(.*-osd)")
+		eww close $(eww windows | grep -oP "\*\K(.*-osd-.*)")
 		rm "/tmp/osd.timeout"
 	else
 		echo $TIMEOUT
