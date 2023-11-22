@@ -1,41 +1,127 @@
+@import "./sccs/colors.scss"
+
 * {
 	all: unset;
 }
 
 .topbar-pri,
-.topbar-sec,
-.sidebar {
-	background-color: #1a1b26;
-	color: #a9b1d6;
-	font: 20px "Roboto Mono";
+.topbar-sec {
+  background-color: rgba($bg-color, 0.9);
+  color: $fg-color;
 }
 
-.top-section {
-	margin: 5px 6px 5px 4px;
+.topbar-pri {
+  .clock-section {
+    font-size: 20px;
+  }
+  .workspaces {
+    margin: .08rem 1rem;
+    padding: .2rem;
+    font-size: .8rem;
+
+    .current-text {
+      padding: 0rem 1.6rem;
+      margin: 0rem .25rem;
+    }
+    .empty-text {
+      padding: 0rem .4rem;
+      margin: 0rem .24rem 0rem 0rem;
+    }
+    .active-text {
+      padding: 0rem .56rem;
+      margin: 0rem .2rem;
+    }
+  }
 }
 
-.workspace-text {
-	font: 18px "FiraCode Nerd Font";
-  margin: 0px 5px 0px 2px;
-  padding: 1px 4px;
+.volume-osd-pri {
+  .volume-osd, .brightness-osd, .osd-box {
+    margin: .6rem;
+    padding: .6rem;
+  }
+
+  .volume-bar trough {
+    min-height: 1.6rem;
+  }
+
+  .volume-bar trough highlight {
+    min-height: 1.6rem;
+  }
+
+  .osd-volume-icon {
+    font-size: 1.2rem;
+    margin-left: 0.4rem;
+  }
 }
 
-.workspace-button:hover {
-	color: #bb9af7;
+.topbar-sec {
+  .clock-section {
+    font-size: 25px;
+  }
+  .workspaces {
+    margin: .1rem 1rem;
+    padding: .25rem;
+    font-size: 1rem;
+
+    .current-text {
+      padding: 0rem 2rem;
+      margin: 0rem .25rem;
+    }
+    .empty-text {
+      padding: 0rem .5rem;
+      margin: 0rem .3rem 0rem 0rem;
+    }
+    .active-text {
+      padding: 0rem .7rem;
+      margin: 0rem .25rem;
+    }
+  }
 }
 
-.current-workspace {
-	color: #7aa2f7;
+.volume-osd-sec {
+  .volume-osd, .brightness-osd, .osd-box {
+    margin: .75rem;
+    padding: .75rem;
+  }
+
+  .volume-bar trough {
+    min-height: 2rem;
+  }
+
+  .volume-bar trough highlight {
+    min-height: 2rem;
+  }
+
+  .osd-volume-icon {
+    font-size: 1.5rem;
+    margin-left: 0.5rem;
+  }
 }
 
-.workspaces-section {
+.workspaces {
 	background-color: #40486a;
-	border-radius: 8px;
-  margin: 0px 5px;
+	border-radius: 1rem;
+
+  .empty:hover {
+    color: $bright-yellow;
+  }
+  .active:hover {
+    .active-text {
+      background-color: $bright-red;
+    }
+  }
+  .current-text {
+    background-image: linear-gradient(to left, $bright-red, $bright-yellow);
+    border-radius: 1rem;
+  }
+  .active-text {
+    background-color: mix($bright-red, $bright-black, 70%);
+    border-radius: 1rem;
+  }
 }
 
 .clock-section {
-	font: 20px "Roboto Mono Bold";
+	font: 1rem "Roboto Mono Bold";
 	font-weight: 700;
 	margin: 3px;
 
@@ -45,55 +131,21 @@
 	}
 }
 
-.bottom-section {
-	background-color: #32344a;
-	border-radius: 8px;
-	margin: 5px;
-}
-
-.battery-icon {
-	font: 18px "FiraCode Nerd Font";
-	margin: 2px 3px;
-}
-
-.volume-icon {
-	font: 18px "FiraCode Nerd Font";
-	margin: 2px 3px;
-}
-
-.brightness-icon {
-	font: 18px "FiraCode Nerd Font";
-	margin: 2px 3px 2px 0px;
-}
-
-.network-icon {
-	font: 18px "FiraCode Nerd Font";
-	margin: 2px 6px 2px 0px;
-}
-
-.volume-osd, .brightness-osd {
-	border-radius: 20px;
+.volume-osd, .brightness-osd, .osd-box {
+	border-radius: 1rem;
 	background-color: rgba(#32344a, 0.9);
-	opacity: 0.9;
 }
 
-.osd-box {
-	font: 20px "Roboto";
-	margin: 20px;
+.volume-bar trough {
+  background-color: #444b6a;
+  border-radius: 1rem;
 }
 
-.volume-circle {
-	color: #bb9af7;
-}
-
-.brightness-circle {
-	color: #ff9e64;
+.volume-bar trough highlight {
+	background-image: linear-gradient(to left, $bright-blue, $bright-green);
+  border-radius: 1rem;
 }
 
 .osd-volume-icon {
-
+  color: $normal-black;
 }
-
-.volume-text {
-}
-
