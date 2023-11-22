@@ -11,26 +11,28 @@
 (defwidget workspace-button [workspace]
   (eventbox
     :class "workspace-button 
-           ${workspace.id == workspaces-current-pri || workspace.id == workspaces-current-sec ? "current-workspace" : ""} 
-           ${workspace.windows > 0 ? "active-workspace" : "empty-workspace"}"
+           ${workspace.id == workspaces-current-pri || workspace.id == workspaces-current-sec ? "current" : ""} 
+           ${workspace.windows > 0 ? "active" : "empty"}"
 
     :onclick "hyprctl dispatch workspace ${workspace.id}"
 
     (label
-      :class "workspace-text"
+      :class "workspace-text ${workspace.id == workspaces-current-pri || workspace.id == workspaces-current-sec ? "current-" :
+                "${workspace.windows > 0 ? "active-" : "empty-"}"}text"
 
-      :text "${workspace.id == workspaces-current-pri || workspace.id == workspaces-current-sec ? "" :
-            "${workspace.windows > 0 ? "" : ""}"}"
+      :text "${workspace.id == workspaces-current-pri || workspace.id == workspaces-current-sec ? "" :
+            "${workspace.windows > 0 ? "" : ""}"}"
       )
     )
   )
 
 (defwidget workspaces-section [orientation valign halign class workspaces-active]
   (box
-    :class "workspaces-section ${class}"
+    :class "workspaces ${class}"
     :orientation orientation
     :valign valign
     :halign halign
+    :space-evenly false
 
     (label
       :visible false
