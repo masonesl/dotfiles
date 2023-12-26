@@ -1,0 +1,32 @@
+#!/bin/python
+
+from shlex      import split as shsplit
+from subprocess import run   as sprun
+from json       import loads
+from os         import (
+        path,
+        remove
+    )
+
+
+def main():
+    # Check if the client state file exists and return if it doesn't
+    if path.exists("/tmp/client_state.json"):
+        with open("/tmp/client_state.json", "r") as client_state:
+            saved_state: list = loads(client_state.read())
+    else:
+        return
+
+    # Swap each client back to its original workspace
+    for client_address in saved_state:
+        new_workspace: int = saved_state[client_address]
+
+        sprun(shsplit("hyprctl dispatch movetoworkspacesilent"+ \
+                      f" {new_workspace},address:{client_address}"))
+
+    # Delete the file because it has done its job
+    remove("/tmp/client_state.json")
+
+
+if __name__ == "__main__":
+    main()
