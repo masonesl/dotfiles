@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Get the cursor x position
+CURSOR_POS=$(hyprctl cursorpos | awk -F', ' '{print $1}')
+
+# Determine which monitor the cursor is on
+if [ $CURSOR_POS -le 2560 ]
+then
+  MONITOR=1
+else
+  MONITOR=0
+fi
+
+_get_workspace() {
+  if [ $MONITOR -eq 1 ]
+  then
+    echo $(($1+10))
+  else
+    echo $1
+  fi
+}
+
+_switch_to() {
+  hyprctl dispatch workspace $(_get_workspace $1)
+}
+
+_move_window_to() {
+  hyprctl dispatch movetoworkspace $(_get_workspace $1)
+}
+
+[ $1 = "switch" ] && _switch_to $2
+[ $1 = "window" ] && _move_window_to $2
