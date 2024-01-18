@@ -19,5 +19,10 @@ export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
 export PYTHONSTARTUP="${XDG_CONFIG_HOME}/python/pythonrc"
 export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+export TEXMFVAR="$XDG_CACHE_HOME"/texlive/texmf-var
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npm/npmrc
+export ANDROID_HOME="$XDG_DATA_HOME"/android
+
+alias monerod=monerod --data-dir "$XDG_DATA_HOME"/bitmonero
 
 export EWW_CONFIG="$XDG_CONFIG_HOME/eww"
