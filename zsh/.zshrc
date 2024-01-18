@@ -13,9 +13,6 @@ export PATH=$PATH:~/.local/share/scripts/
 
 export EDITOR=nvim
 
-# JellyFin docker compose directory
-export JF_DC_DIR=/opt/jellyfin
-
 ###########
 # Aliases #
 ###########
