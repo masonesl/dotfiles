@@ -1,0 +1,27 @@
+#!/bin/zsh
+
+t() {
+  OPTIONS=()
+  ARGS=("$@")
+
+  case "$1" in
+    n)
+      OPTIONS+=("new" "-s") ;;
+    as)
+      OPTIONS+=("attach" "-t") ;;
+    a)
+      OPTIONS+=("attach") ;;
+    l)
+      OPTIONS+=("ls") ;;
+    *)
+      tmux $ARGS
+      return
+      ;;
+  esac
+
+  for ARG in "${ARGS[@]:1}" ; do
+    OPTIONS+=("$ARG")
+  done
+
+  tmux $OPTIONS
+}

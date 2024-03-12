@@ -1,17 +1,17 @@
-(defpoll clock-time
-  :interval "5s"
-  "date +'%I %M   %b %d'"
-  )
+;; Get the current time in the format: 01 05  Mon Feb 05
+(defpoll clock-text
+  :interval "2s"
+  "date +'%I %M   %a %b %d'")
 
-(defwidget clock-section []
+;; Define a widget to display the current clock text
+(defwidget clock-section [monitor-class]
   (eventbox
-    :class "clock-section"
+    :class "clock-section ${monitor-class}"
     :halign "center"
     :valign "center"
-    (label
-      :class "clock-time"
-      :text clock-time
-      )
-    )
-  )
 
+    (label
+      :class "clock-text"
+      :text clock-text)
+  )
+)

@@ -1,46 +1,53 @@
-(deflisten workspaces-current-pri
+;; Listen for workspaces that exist at any given time per monitor
+(deflisten primary-workspaces
+  :initial "[]"
+  "sh ~/.local/share/scripts/workspace current-listener 0")
+
+(deflisten secondary-workspaces
+  :initial "[]"
+  "sh ~/.local/share/scripts/workspace current-listener 1")
+
+;; Listen for the active workspace on each monitor
+(deflisten primary-active-workspace
   :initial "1"
-  "sh $XDG_CONFIG_HOME/eww/scripts/get-current-workspace 1 10"
-  )
+  "sh ~/.local/share/scripts/workspace active-listener 0")
 
-(deflisten workspaces-current-sec
+(deflisten secondary-active-workspace
   :initial "11"
-  "sh $XDG_CONFIG_HOME/eww/scripts/get-current-workspace 11 20"
-  )
+  "sh ~/.local/share/scripts/workspace active-listener 1")
 
+;; Define a widget for an individual workspace button
 (defwidget workspace-button [workspace]
   (eventbox
     :class "workspace-button 
-           ${workspace.id == workspaces-current-pri || workspace.id == workspaces-current-sec ? "current-workspace" : ""} 
-           ${workspace.windows > 0 ? "active-workspace" : "empty-workspace"}"
+           ${workspace == primary-active-workspace || 
+             workspace == secondary-active-workspace ? "active" : "current"}"
 
-    :onclick "hyprctl dispatch workspace ${workspace.id}"
+    :onclick "~/.local/share/scripts/workspace switch exact ${workspace}"
 
     (label
       :class "workspace-text"
 
-      :text "${workspace.id == workspaces-current-pri || workspace.id == workspaces-current-sec ? "" :
-            "${workspace.windows > 0 ? "" : ""}"}"
-      )
-    )
+      :text "")
   )
+)
 
-(defwidget workspaces-section [orientation valign halign class workspaces-active]
+;; Define a widget to hold all workspace buttons per monitor
+(defwidget workspace-section [monitor-class workspaces]
   (box
-    :class "workspaces-section ${class}"
-    :orientation orientation
-    :valign valign
-    :halign halign
+    :class "workspace-section ${monitor-class}"
+    :orientation "horizontal"
+    :valign "center"
+    :halign "start"
+    :space-evenly false
 
     (label
       :visible false
-      :text "${workspaces-current-pri} ${workspaces-current-sec}"
-      )
+      :text "${secondary-active-workspace} ${primary-active-workspace}")
 
-    (for workspace in workspaces-active
+    (for workspace in workspaces
       (workspace-button
-        :workspace workspace
-        )
-      )
+        :workspace workspace)
     )
   )
+)

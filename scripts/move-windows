@@ -1,0 +1,45 @@
+#!/bin/python
+
+from shlex      import split as shsplit
+from json       import (
+        loads,
+        dumps
+        )
+from subprocess import (
+        run as sprun,
+        PIPE
+        )
+
+
+def main():
+    # Get all windows information in JSON
+    hypr_output: str = sprun(
+            shsplit("hyprctl clients -j"),
+            stdout=PIPE,
+            text=True).stdout
+
+    client_map: list = loads(hypr_output)
+
+    saved_state: dict = {}
+
+    for hypr_client in client_map:
+        if hypr_client["monitor"] == 1:
+            # Move the client to the corresponding workspace on main monitor
+            client_address: str = hypr_client["address"]
+            old_workspace:  int = hypr_client["workspace"]["id"]
+            new_workspace:  int = old_workspace - 10
+
+            sprun(shsplit("hyprctl dispatch movetoworkspacesilent"+ \
+                          f" {new_workspace},address:{client_address}"))
+
+            # Save the client's previous workspace
+            saved_state[client_address] = old_workspace
+
+    # Dump the saved state to a temporary file
+    if saved_state:
+        with open("/tmp/client_state.json", "w") as client_state:
+            client_state.write(dumps(saved_state))
+
+
+if __name__ == "__main__":
+    main()

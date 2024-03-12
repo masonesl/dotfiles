@@ -1,17 +1,37 @@
-(defwindow volume-osd
-	:monitor 0
-	:stacking "fg"
-	:wm-ignore false
-	:exclusive false
-	:geometry (geometry
-		:anchor "center top"
-		:y "10%"
-		:width "9%"
-		:height "16%"
-		)
-	
-	(osd-box
-		:class "volume"
-		:value volume-system
-		:icon {volume-system != 0 ? "󰕾" : "󰸈"}))
+(defvar system-volume 0)
 
+(defwindow primary-volume-osd
+  :monitor 0
+  :stacking "foreground"
+  :wm-ignore false
+  :exclusive false
+  :geometry (geometry
+    :anchor "center top"
+    :y "2%"
+    :width "16%"
+    :height "2%")
+
+  (osd-box
+    :osd-class "volume"
+    :value system-volume
+    :icon {system-volume != 0 ? "󰕾" : "󰸈"}
+    :command "volume set")
+)
+
+(defwindow secondary-volume-osd
+  :monitor 1
+  :stacking "foreground"
+  :wm-ignore false
+  :exclusive false
+  :geometry (geometry
+    :anchor "center top"
+    :y "2%"
+    :width "16%"
+    :height "2%")
+
+  (osd-box
+    :osd-class "volume"
+    :value system-volume
+    :icon {system-volume != 0 ? "󰕾" : "󰸈"}
+    :command "volume set")
+)

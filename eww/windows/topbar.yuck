@@ -1,55 +1,51 @@
-(defwindow topbar-pri
+(defwindow primary-topbar
   :monitor 0
-  :stacking "fg"
+  :stacking "foreground"
   :wm-ignore false
   :exclusive true
   :geometry (geometry
-              :anchor "top center"
-              :x "0%"
-              :y "0%"
-              :width "100%"
-              :height "32px"
-              )
-  (centerbox
-    :orientation "h"
-    (workspaces-section
-      :orientation "h"
-      :valign "center"
-      :halign "start"
-      :class "top"
-      :workspaces-active workspaces-active-pri)
-    (clock-section)
-    (box)))
+    :anchor "top center"
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "32px")
 
-(defwindow topbar-sec
+  (centerbox
+    :orientation "horizontal"
+
+    (workspace-section
+      :monitor-class "primary"
+      :workspaces primary-workspaces)
+
+    (clock-section
+      :monitor-class "primary")
+
+    (box)
+  )
+)
+
+(defwindow secondary-topbar
   :monitor 1
-  :stacking "fg"
+  :stacking "foreground"
   :wm-ignore false
   :exclusive true
   :geometry (geometry
-              :anchor "top center"
-              :x "0%"
-              :y "0%"
-              :width "100%"
-              :height "43px"
-              )
+    :anchor "top center"
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "43px")
+
   (centerbox
-    :orientation "h"
-    (workspaces-section
-      :orientation "h"
-      :valign "center"
-      :halign "start"
-      :class "top"
-      :workspaces-active workspaces-active-sec)
-    (clock-section)
-    (box)))
+    :orientation "horizontal"
 
-(deflisten workspaces-active-pri
-  :initial "[]"
-  "sh $XDG_CONFIG_HOME/eww/scripts/get-workspaces 1 10"
-  )
+    (workspace-section
+      :monitor-class "secondary"
+      :workspaces secondary-workspaces)
 
-(deflisten workspaces-active-sec
-  :initial "[]"
-  "sh $XDG_CONFIG_HOME/eww/scripts/get-workspaces 11 20"
+    (clock-section
+      :monitor-class "secondary")
+
+    (box)
   )
+)

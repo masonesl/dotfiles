@@ -1,2 +1,0 @@
-before-sleep 'swaylock'
-lock         'swaylock'
