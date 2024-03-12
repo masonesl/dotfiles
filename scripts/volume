@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/env /bin/sh
 
 VOLUME_INCREMENT=0.02
 
@@ -9,8 +9,14 @@ _update_eww () {
 
 	# Close any open osd overlays and start volume osd
 	eww close $(eww windows | grep -oP "\*\K(.*-osd)" | grep -v volume-osd)
-	eww open volume-osd-pri
-  eww open volume-osd-sec 2> /dev/null
+
+  case "$(eval $XDG_DATA_HOME/scripts/workspace get-monitor)" in
+    0) eww open primary-volume-osd
+    ;;
+    1) eww open secondary-volume-osd
+    ;;
+  esac
+  
 	echo 3 > /tmp/osd.timeout
 }
 
@@ -68,16 +74,15 @@ _adjust_volume () {
   _update_eww $(_get_volume)
 }
 
-[ "$1" = "get" ] && _get_volume
-[ "$1" = "set" ] && _set_volume $2
-[ "$1" = "adjust" ] && _adjust_volume $2
-[ "$1" = "toggle-mute" ] && _toggle_mute
-[ "$1" = "update-eww" ] && _update_eww $(_get_volume)
-
-[ -n "$1" ] || echo \
-"Subcommands:\n \
-	get\n \
-	set [vol]\n \
-	adjust [up|down]\n \
-	toggle-mute\n \
-	update-eww"
+case "$1" in
+  get) _get_volume
+  ;;
+  set) _set_volume $2
+  ;;
+  adjust) _adjust_volume $2
+  ;;
+  toggle-mute) _toggle_mute
+  ;;
+  update-eww) _update_eww $(_get_volume)
+  ;;
+esac
