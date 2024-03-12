@@ -1,32 +1,112 @@
-#!/bin/sh
+#!/bin/env /bin/sh
 
-# Get the cursor x position
-CURSOR_POS=$(hyprctl cursorpos | awk -F', ' '{print $1}')
+_get_monitor() {
+  CURSOR_POS=$(hyprctl cursorpos -j | jq -M '.x')
 
-# Determine which monitor the cursor is on
-if [ $CURSOR_POS -le 2560 ]
-then
-  MONITOR=1
-else
-  MONITOR=0
-fi
+  if [ $CURSOR_POS -gt 2560 ] ; then
+    echo 0
+  else
+    echo 1
+  fi
+}
 
 _get_workspace() {
-  if [ $MONITOR -eq 1 ]
-  then
-    echo $(($1+10))
+  case "$(_get_monitor)" in
+    0) echo $1
+    ;;
+    1) echo $(($1+10))
+    ;;
+  esac
+}
+
+_get_min() {
+  case "$1" in
+    0) echo 1
+    ;;
+    1) echo 11
+    ;;
+  esac
+}
+
+_get_max() {
+  case "$1" in
+    0) echo 10
+    ;;
+    1) echo 20
+    ;;
+  esac
+}
+
+_get_current() {
+  hyprctl workspaces -j | jq -Mc "map(.id | select(. >= $(_get_min $1) and . <= $(_get_max $1))) | sort"
+}
+
+_get_active() {
+  hyprctl monitors -j | jq -M ".[].activeWorkspace.id | select(. >= $(_get_min $1) and . <= $(_get_max $1))"
+}
+
+_limit_workspace() {
+  WORKSPACE=$(_get_workspace $1)
+  MAX_CURRENT=$(_get_current $(_get_monitor) | jq -M 'max')
+
+  if [ $WORKSPACE -gt $MAX_CURRENT ] ; then
+    echo $(($MAX_CURRENT+1))
+  else
+    echo $WORKSPACE
+  fi
+}
+
+_clamp_workspace() {
+  if [ $1 -gt 10 ] ; then
+    echo $(($1 - 10))
   else
     echo $1
   fi
 }
 
 _switch_to() {
-  hyprctl dispatch workspace $(_get_workspace $1)
+  hyprctl dispatch workspace $(_limit_workspace $1)
 }
 
 _move_window_to() {
-  hyprctl dispatch movetoworkspace $(_get_workspace $1)
+  hyprctl dispatch movetoworkspacesilent $(_limit_workspace $1)
 }
 
-[ $1 = "switch" ] && _switch_to $2
-[ $1 = "window" ] && _move_window_to $2
+_current_listener() {
+  _get_current $1
+  socat -U - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock |
+    while read -r line ; do
+      ( echo $line | grep -q workspace ) && _get_current $1
+    done
+}
+
+_active_listener() {
+  _get_active $1
+  socat -U - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock |
+    while read -r line ; do
+      ( echo $line | grep -q workspace ) && _get_active $1
+    done
+}
+
+case "$1" in
+  switch)
+    if [ "$2" = "exact" ] ; then
+      WORKSPACE=$(_clamp_workspace $3)
+    else
+      WORKSPACE=$2
+    fi
+    _switch_to $WORKSPACE
+  ;;
+  window) _move_window_to $2
+  ;;
+  current) _get_current $2
+  ;;
+  active) _get_active $2
+  ;;
+  get-monitor) _get_monitor
+  ;;
+  current-listener) _current_listener $2
+  ;;
+  active-listener) _active_listener $2
+  ;;
+esac
