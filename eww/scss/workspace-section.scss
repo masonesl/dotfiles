@@ -1,0 +1,26 @@
+.workspace-section {
+  background-color: lighten($bg-color, 20%);
+  border-radius: $radius;
+
+  .active .workspace-text {
+    background-color: $normal-magenta;
+    border-radius: $radius;
+  }
+
+  .current .workspace-text {
+    background-color: $normal-blue;
+    border-radius: $radius;
+  }
+  
+  .active:hover {
+    .workspace-text {
+      background-color: darken($normal-magenta, 10%);
+    }
+  }
+
+  .current:hover {
+    .workspace-text {
+      background-color: darken($normal-blue, 10%);
+    }
+  }
+}

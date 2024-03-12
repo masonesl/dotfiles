@@ -1,5 +1,0 @@
-#!/bin/sh
-
-listen() {
-        socat -U - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock
-}

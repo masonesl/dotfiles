@@ -1,22 +1,25 @@
-#!/bin/sh
+#!/bin/dash
 
-_poll () {
-	TIMEOUT=$(cat "/tmp/osd.timeout")
+_poll() {
+  TIMEOUT=$(cat /tmp/osd.timeout)
 
-	if [ "$TIMEOUT" -le 0 ]
-	then
-		eww close $(eww windows | grep -oP "\*\K(.*-osd-.*)")
-		rm "/tmp/osd.timeout"
-	else
-		echo $TIMEOUT
-		echo $(($TIMEOUT - 1)) > "/tmp/osd.timeout"
-	fi
+  if [ $TIMEOUT -le 0 ] ; then
+    eww close $(eww windows | grep -oP "\*\K(.*-osd)")
+    rm /tmp/osd.timeout
+  else
+    echo $TIMEOUT
+    echo $(($TIMEOUT - 1)) > /tmp/osd.timeout
+  fi
 }
 
-_reset () {
-	echo 3 > "/tmp/osd.timeout"
-	eww update "osd-timeout-hold=false"
+_reset() {
+  echo 3 > /tmp/osd.timeout
+  eww update osd-timeout-hold=false
 }
 
-[ "$1" = "poll" ] && _poll $2 && return
-[ "$1" = "reset" ] && _reset $2
+case "$1" in
+  poll) _poll
+  ;;
+  reset) _reset
+  ;;
+esac

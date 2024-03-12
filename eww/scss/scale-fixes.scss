@@ -1,0 +1,44 @@
+.primary-topbar {
+
+  .clock-section {
+    font-size: 20px;
+  }
+
+  .workspace-section {
+    margin: .08rem 1rem;
+    padding: .2rem;
+    font-size: .8rem;
+
+    .active .workspace-text {
+      padding: 0rem 1.6rem;
+      margin: 0rem .25rem;
+    }
+    .current .workspace-text {
+      padding: 0rem .56rem;
+      margin: 0rem .2rem;
+    }
+  }
+}
+
+.secondary-topbar {
+  .clock-section {
+    font-size: 25px;
+  }
+
+  .workspace-section {
+    margin: .1rem 1rem;
+    padding: .25rem;
+    font-size: 1rem;
+
+    .active .workspace-text {
+      padding: 0rem 2rem;
+      margin: 0rem .25rem;
+    }
+
+    .current .workspace-text {
+      padding: 0rem .7rem;
+      margin: 0rem .25rem;
+    }
+  }
+}
+

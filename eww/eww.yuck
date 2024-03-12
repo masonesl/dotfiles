@@ -5,9 +5,4 @@
 ;; Widgets
 (include "./widgets/workspaces.yuck")
 (include "./widgets/clock.yuck")
-(include "./widgets/media.yuck")
-(include "./widgets/volume.yuck")
-(include "./widgets/network.yuck")
 (include "./widgets/osd.yuck")
-
-

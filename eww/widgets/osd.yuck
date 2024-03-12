@@ -1,29 +1,35 @@
-(defwidget osd-box [class value icon]
-	(eventbox
-		:onhover "eww update osd-timeout-hold=true"
-		:onhoverlost "sh $EWW_CONFIG/scripts/osd-timeout reset"
-
-		(box
-			:class "osd-box"
-      (overlay
-        (scale 
-          :class "${class}-bar"
-          :value value
-          :onchange "sh $HOME/.local/share/scripts/volume set {}"
-          :orientation "horizontal")
-        (label
-          :class "osd-${class}-icon"
-          :halign "start"
-          :text icon))
-
-			(label
-				:visible false
-				:text "${osd-timeout}"))))
-
 (defvar osd-timeout-hold false)
 
 (defpoll osd-timeout
-	:run-while {osd-timeout-hold != true}
-	:initial 3
-	:interval "1s"
-	"sh $EWW_CONFIG/scripts/osd-timeout poll")
+  :run-while {osd-timeout-hold != true}
+  :initial 3
+  :interval "1s"
+  "eval ./scripts/osd-timeout poll")
+
+(defwidget osd-box [osd-class value icon command]
+  (eventbox
+    :onhover "$EWW_CMD update osd-timeout-hold=true"
+    :onhoverlost "eval $EWW_CONFIG_DIR/scripts/ost-timeout reset"
+
+    (box
+      :class "osd"
+
+      (overlay
+        (scale
+          :class "osd-${osd-class}-bar"
+          :value value
+          :onchange "${command} {}"
+          :orientation "horizontal")
+
+          (label
+            :class "osd-${osd-class}-icon"
+            :halign "start"
+            :text icon)
+      )
+
+      (label
+        :visible false
+        :text "${osd-timeout}")
+    )
+  )
+)
