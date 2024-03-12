@@ -47,7 +47,6 @@ export FPATH=$FPATH:~/.local/share/zfunctions
 autoload unknow
 autoload t
 autoload g
-autoload dev
 
 ###########
 # Plugins #
