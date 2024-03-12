@@ -1,25 +1,21 @@
-local opt = vim.opt
-local api = vim.api
-local fn  = vim.fn
-local g   = vim.g
+require('base.set')
+require('base.remap')
+require('base.command')
 
--- Obtain a variable containing the colors of the current theme
-local function get_colors()
-  local lazy_path = fn.stdpath('data') .. '/lazy/base46'
-  opt.rtp:prepend(lazy_path)
-  return require('base46').get_theme_tb('base_30')
+-- Setup the lazy plugin manager
+local lazypath = vim.fn.stdpath('data') .. 'lazy/lazy.nvim'
+
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable',
+    lazypath
+  })
 end
 
-local colors = get_colors()
+vim.opt.rtp:prepend(lazypath)
 
--- Set line number colors below and above relative line
-api.nvim_set_hl(0, 'LineNrAbove', {
-  fg = colors.cyan,
-})
-api.nvim_set_hl(0, 'LineNrBelow', {
-  fg = colors.green,
-})
-
-
-opt.relativenumber = true
-
+require('lazy').setup('plugins')

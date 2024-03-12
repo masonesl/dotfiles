@@ -1,2 +1,4 @@
 zsh/.zcompdump
 neovim/lua/.luarc.json
+tmux/plugins/*
+
