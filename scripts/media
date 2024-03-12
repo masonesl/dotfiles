@@ -9,6 +9,18 @@ update_eww() {
 		eww update media-player-status="$PLAYER_STATUS" &
 }
 
+_get_cover() {
+  URL=$(playerctl --player="$1" metadata | awk '/artUrl/ {print $3}')
+
+  if ( echo $URL | grep -q "https" )
+  then
+    (cd /tmp && curl $URL -o downloaded_cover 2> /dev/null)
+    echo "/tmp/downloaded_cover"
+  else
+    echo $URL | sed 's|file://||g'
+  fi
+}
+
 _player() {
   if [ -z "$2" ]
   then
@@ -27,5 +39,4 @@ _player() {
 	[ "$1" = "previous" ] && \
 	_player "$1" "$2"
 
-# sleep 0.05
-# update_eww $2
+[ "$1" = "cover" ] && _get_cover $2
