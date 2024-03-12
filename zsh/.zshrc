@@ -2,8 +2,8 @@
 
 # Command history settings
 HISTFILE=~/.cache/zsh_histfile
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
 
 export PATH=$PATH:~/.local/share/scripts/
 
@@ -31,14 +31,11 @@ alias s='sudo '
 alias n='nvim'
 alias c='cd'
 
-alias g='git'
-alias ga='git add'
-alias gc='git commit -m'
-alias gp='git push'
-
 alias h='history 1 | grep'
 
 alias bash="HOME=$HOME/.local/share/fakehome bash"
+
+alias grep="rg"
 
 #############
 # Functions #
@@ -47,9 +44,10 @@ alias bash="HOME=$HOME/.local/share/fakehome bash"
 #Import directory containing functions
 export FPATH=$FPATH:~/.local/share/zfunctions
 
-autoload searchpac
 autoload unknow
-autoload nv
+autoload t
+autoload g
+autoload dev
 
 ###########
 # Plugins #
@@ -61,6 +59,8 @@ source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.
 # Load Starship prompt
 eval "$(starship init zsh)"
 
+eval "$(zoxide init --cmd='cd' zsh)"
+
 # Load VI mode
 source /usr/share/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
@@ -69,6 +69,8 @@ export PF_INFO="ascii title os kernel de shell editor uptime pkgs memory palette
 pfetch
 
 autoload -U compinit; compinit
+compdef g=git
+compdef t=tmux
 
 compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
 
