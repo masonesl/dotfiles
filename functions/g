@@ -1,0 +1,29 @@
+#!/bin/zsh
+
+g() {
+  OPTIONS=()
+  ARGS=("$@")
+
+  case "$1" in 
+    s)
+      OPTIONS+=("status") ;;
+    p)
+      OPTIONS+=("push") ;;
+    pl)
+      OPTIONS+=("pull") ;;
+    a)
+      OPTIONS+=("add") ;;
+    c)
+      OPTIONS+=("commit" "-m") ;;
+    *)
+      git $ARGS
+      return
+      ;;
+  esac
+
+  for ARG in "${ARGS[@]:1}" ; do
+    OPTIONS+=("$ARG")
+  done
+
+  git $OPTIONS
+}
