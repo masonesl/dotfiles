@@ -57,6 +57,21 @@ local function config()
           }
         })
       end,
+      rust_analyzer = function()
+        lsp.rust_analyzer.setup({
+          capabilities = capabilities,
+          handlers = border_handlers,
+          filetypes = {'rust'},
+          root_dir = lsp.util.root_pattern('Cargo.toml'),
+          settings = {
+            ['rust-analyzer'] = {
+              cargo = {
+                allFeatures = true,
+              },
+            },
+          },
+        })
+      end,
     },
   })
 end
