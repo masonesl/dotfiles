@@ -91,4 +91,7 @@ return {
       'nvim-tree/nvim-web-devicons',
     },
   },
+  {
+    'elkowar/yuck.vim',
+  },
 }
