@@ -1,4 +1,4 @@
 zsh/.zcompdump
 neovim/lua/.luarc.json
 tmux/plugins/*
-
+nvim/lazy-lock.json
