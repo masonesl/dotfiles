@@ -1,3 +1,5 @@
+// #[allow(dead_code)]
+
 use hyprland::{self, shared::{HyprData as _, HyprError}};
 
 struct NamedWorkspace<'a> {
@@ -70,12 +72,14 @@ pub mod monitor {
                 .push(NamedWorkspace::new(unique_id, display_name));
         }
 
-        pub fn print_json(&mut self) -> Result<(), HyprError> {
+        pub fn update(&mut self) -> Result<usize, HyprError> {
             // set all workspaces to inactive
             self.named_workspaces.iter_mut().for_each(|named| named.is_active = false);
             self.unnamed_workspaces.clear();
 
             let workspaces = hyprland::data::Workspaces::get()?;
+
+            // TODO: maybe move this to a struct member since it shouldn't change
             let workspace_id_clamp = self.named_workspaces.len() + self.unnamed_workspaces.capacity();
 
             for workspace in workspaces {
@@ -92,6 +96,12 @@ pub mod monitor {
                     self.unnamed_workspaces.push(UnnamedWorkspace{unique_id: workspace.id as usize});
                 }
             }
+
+            return Ok(workspace_id_clamp);
+        }
+
+        pub fn print_json(&mut self) -> Result<(), HyprError> {
+            let workspace_id_clamp = self.update()?;
 
             // output a json object containing each workspace to be displayed with the format:
             //
@@ -116,7 +126,7 @@ pub mod monitor {
             match self.named_workspaces.get(1..) {
                 Some(workspaces) => {
                     workspaces.iter().for_each(|named| {
-                        print!(",");     
+                        print!(", ");     
                         named.print_json();
                     });
                 },
@@ -127,7 +137,7 @@ pub mod monitor {
             match self.unnamed_workspaces.first() {
                 Some(first) => {
                     if self.named_workspaces.len() > 0 {
-                        print!(",");
+                        print!(", ");
                     }
                     first.print_json(workspace_id_clamp);
                 },
@@ -137,7 +147,7 @@ pub mod monitor {
             match self.unnamed_workspaces.get(1..) {
                 Some(workspaces) => {
                     workspaces.iter().for_each(|unnamed| {
-                        print!(",");     
+                        print!(", ");     
                         unnamed.print_json(workspace_id_clamp)
                     });
                 },
@@ -167,6 +177,29 @@ pub mod listen {
                     eprintln!("{}", err);
                     return ();
                 },
+            }
+        });
+
+        listener.start_listener().unwrap();
+    }
+
+    pub fn current(monitor_name: &'static str) {
+        let mut listener = hyprland::event_listener::EventListener::new();
+
+        listener.add_workspace_change_handler(move |_| {
+            let monitors = match hyprland::data::Monitors::get() {
+                Ok(m) => m,
+                Err(err) => {
+                    eprintln!("{}", err);
+                    return ();
+                },
+            };
+
+            for mon in monitors {
+                if mon.name == monitor_name {
+                    println!("{}", mon.active_workspace.id);
+                    break;
+                }
             }
         });
 
