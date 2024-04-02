@@ -21,8 +21,7 @@ alias l='lsd'
 alias ll='lsd -lh'
 alias la='lsd -a'
 alias lla='lsd -lha'
-
-alias grep='grep --color=auto'
+alias lt='lsd --tree'
 
 alias wget='wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'
 
@@ -58,6 +57,7 @@ source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.
 # Load Starship prompt
 eval "$(starship init zsh)"
 
+# Load zoxide as replacement for 'cd'
 eval "$(zoxide init --cmd='cd' zsh)"
 
 # Load VI mode
@@ -68,9 +68,8 @@ export PF_INFO="ascii title os kernel de shell editor uptime pkgs memory palette
 pfetch
 
 autoload -U compinit; compinit
+
 compdef g=git
 compdef t=tmux
 
 compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
-
-# EOF
