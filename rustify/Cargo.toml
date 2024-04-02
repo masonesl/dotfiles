@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 hyprland = "=0.3.13"
+clap     = { version = "4.5.4", features = ["derive"] }
