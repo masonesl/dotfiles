@@ -14,6 +14,8 @@ pub mod workspaces {
     pub enum Command {
         Active(ListenArgs),
         Current(ListenArgs),
+
+        Goto(GotoArgs),
     }
 
     #[derive(Args, Debug)]
@@ -25,4 +27,12 @@ pub mod workspaces {
         pub oneshot: bool,
     }
 
+    #[derive(Args, Debug)]
+    pub struct GotoArgs {
+        #[arg()]
+        pub id: i32,
+
+        #[arg(value_enum)]
+        pub monitor: Option<config::workspaces::MonitorPreset>,
+    }
 }

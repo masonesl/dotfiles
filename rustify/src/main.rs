@@ -3,6 +3,7 @@ mod args;
 mod config;
 
 use clap::Parser;
+use workspaces::action;
 
 use crate::workspaces::{listen, monitor};
 
@@ -26,6 +27,12 @@ fn main() {
                 todo!();
             } else {
                 listen::current(monitor_name);
+            }
+        },
+        args::workspaces::Command::Goto(opts) => {
+            match opts.monitor {
+                Some(_) => todo!(),
+                None => action::goto_workspace(opts.id),
             }
         },
     }
