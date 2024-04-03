@@ -1,11 +1,10 @@
 mod workspaces;
 mod args;
+mod config;
 
 use clap::Parser;
 
 use crate::workspaces::{listen, monitor};
-
-
 
 fn main() {
     let cli_args = args::workspaces::Args::parse();
