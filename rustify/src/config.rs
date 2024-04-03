@@ -1,12 +1,12 @@
 pub mod workspaces {
     use clap::ValueEnum;
     use std::{rc::Rc, cell::RefCell};
-    use crate::workspaces as workspaces_main;
+    use crate::workspaces::monitor::MonitorContainer;
 
     macro_rules! new_monitor {
         ($monitor:expr, $($workspaces:expr),*) => {
             {
-                let m = Rc::new(RefCell::new(workspaces_main::monitor::MonitorContainer::new($monitor)));
+                let m = Rc::new(RefCell::new(MonitorContainer::new($monitor)));
 
                 $(
                     m.borrow_mut().add_named_workspace($workspaces.0, $workspaces.1)
@@ -18,7 +18,7 @@ pub mod workspaces {
 
         ($monitor:expr, named $named_size:expr, unnamed $unnamed_size:expr, $($workspaces:expr),*) => {
             {
-                let m = Rc::new(RefCell::new(workspaces_main::monitor::MonitorContainer::new_with_alloc($monitor, $named_size, $unnamed_size)));
+                let m = Rc::new(RefCell::new(MonitorContainer::new_with_alloc($monitor, $named_size, $unnamed_size)));
 
                 $(
                     m.borrow_mut().add_named_workspace($workspaces.0, $workspaces.1)
@@ -37,7 +37,7 @@ pub mod workspaces {
     }
 
     impl MonitorPreset {
-        pub fn get(&self) -> Rc<RefCell<workspaces_main::monitor::MonitorContainer<'static, 'static>>> {
+        pub fn get(&self) -> Rc<RefCell<MonitorContainer<'static>>> {
             return match self {
                 MonitorPreset::Primary => new_monitor!(
                     "DP-1",

@@ -47,15 +47,15 @@ pub mod monitor {
     static NAMED_ALLOC: usize = 4;
     static UNNAMED_ALLOC: usize = 6;
 
-    pub struct MonitorContainer<'a, 'b> {
-        unique_name: &'b str,                      // unique monitor name (ie. HDMI-A-1)
+    pub struct MonitorContainer<'a> {
+        unique_name: &'a str,                      // unique monitor name (ie. HDMI-A-1)
         named_workspaces: Vec<NamedWorkspace<'a>>, // workspaces that should always be shown
         unnamed_workspaces: Vec<UnnamedWorkspace>, // workspaces that should be shown if they exist
     }
 
-    impl<'a, 'b> MonitorContainer<'a, 'b> {
+    impl<'a> MonitorContainer<'a> {
         #[allow(unused)]
-        pub fn new(unique_name: &'b str) -> Self {
+        pub fn new(unique_name: &'a str) -> Self {
             return Self {
                 unique_name,
                 named_workspaces: Vec::<NamedWorkspace>::with_capacity(NAMED_ALLOC),
@@ -64,7 +64,7 @@ pub mod monitor {
         }
 
         #[allow(unused)]
-        pub fn new_with_alloc(unique_name: &'b str, named_alloc: usize, unnamed_alloc: usize) -> Self {
+        pub fn new_with_alloc(unique_name: &'a str, named_alloc: usize, unnamed_alloc: usize) -> Self {
             return Self {
                 unique_name,
                 named_workspaces: Vec::<NamedWorkspace>::with_capacity(named_alloc),
@@ -174,7 +174,7 @@ pub mod listen {
 
     use crate::config;
 
-    pub fn active(monitor: Rc<RefCell<MonitorContainer<'static, 'static>>>) {
+    pub fn active(monitor: Rc<RefCell<MonitorContainer<'static>>>) {
         let mut listener = hyprland::event_listener::EventListener::new();
 
         listener.add_workspace_change_handler(move |_| {
