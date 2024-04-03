@@ -172,6 +172,8 @@ pub mod listen {
     use super::*;
     use monitor::*;
 
+    use crate::config;
+
     pub fn active(monitor: Rc<RefCell<MonitorContainer<'static, 'static>>>) {
         let mut listener = hyprland::event_listener::EventListener::new();
 
@@ -213,13 +215,24 @@ pub mod listen {
 }
 
 pub mod action {
-    use hyprland::dispatch::*;
+    use hyprland::{dispatch::*, shared::HyprData};
 
     pub fn goto_workspace(workspace_id: i32) {
-        Dispatch::call(
-            DispatchType::Workspace(
-                WorkspaceIdentifierWithSpecial::Id(workspace_id)
-            )
-        ); 
+        match hyprland::data::Workspaces::get().unwrap().find_map(|w| {
+            if w.id == workspace_id {
+                Some(w)
+            } else {
+                None
+            }
+        }) {
+            Some(_) => {
+                Dispatch::call(
+                    DispatchType::Workspace(
+                        WorkspaceIdentifierWithSpecial::Id(workspace_id)
+                    )
+                ).unwrap();
+            },
+            None => {},
+        }
     }
 }
