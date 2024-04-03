@@ -1,6 +1,9 @@
-// #[allow(dead_code)]
-
-use hyprland::{self, shared::{HyprData as _, HyprError}};
+use hyprland::{
+    self,
+    shared::{
+        HyprData as _, HyprError
+    }
+};
 
 struct NamedWorkspace<'a> {
     unique_id: usize,
@@ -51,6 +54,7 @@ pub mod monitor {
     }
 
     impl<'a, 'b> MonitorContainer<'a, 'b> {
+        #[allow(unused)]
         pub fn new(unique_name: &'b str) -> Self {
             return Self {
                 unique_name,
@@ -59,6 +63,7 @@ pub mod monitor {
             };
         }
 
+        #[allow(unused)]
         pub fn new_with_alloc(unique_name: &'b str, named_alloc: usize, unnamed_alloc: usize) -> Self {
             return Self {
                 unique_name,
@@ -188,7 +193,7 @@ pub mod listen {
 
         listener.add_workspace_change_handler(move |_| {
             let monitors = match hyprland::data::Monitors::get() {
-                Ok(m) => m,
+                Ok(m)    => m,
                 Err(err) => {
                     eprintln!("{}", err);
                     return ();
@@ -207,3 +212,14 @@ pub mod listen {
     }
 }
 
+pub mod action {
+    use hyprland::dispatch::*;
+
+    pub fn goto_workspace(workspace_id: i32) {
+        Dispatch::call(
+            DispatchType::Workspace(
+                WorkspaceIdentifierWithSpecial::Id(workspace_id)
+            )
+        ); 
+    }
+}
