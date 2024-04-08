@@ -1,44 +1,56 @@
-#!/bin/sh
+#!/bin/bash
 
 SCRIPTPATH=$(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)
 
 _link () {
+  # check if there is already a file
 	[ -e $2 ] && return
-
 	mkdir --parents $(dirname $1)
-
 	ln --symbolic $SCRIPTPATH/$1 $2
 }
 
 _ensure_installed () {
+  # TODO: implement other package manager support (ie. apt, dpkg, portage, etc.)
+
 	MISSING=$(pacman -Q $* 2>/dev/stdout 1>/dev/null | awk '{print $3}' | tr -d \')
-	
-	[ -z $MISSING ] || paru -S $(echo $MISSING)
+
+	[ -z $MISSING ] || echo "paru -S $(echo $MISSING)"
 }
 
-_ensure_installed lsd starship pfetch-rs zsh-fast-syntax-highlighting zsh-vi-mode
-_link zsh ~/.config/zsh
-_link functions ~/.local/share/zfunctions
+_install() {
+  PROGS=()
 
-_ensure_installed alacritty
-_link alacritty ~/.config/alacritty
+  for ARG in $@ ; do
+    if [[ $ARG == 'zsh' || $ARG == 'all' ]] ; then
+      PROGS+='zsh lsd starship pfetch-rs zsh-fast-syntax-highlighting zsh-vi-mode zoxide ripgrep fd '
+    fi
+    if [[ $ARG == 'kitty' || $ARG == 'all' ]] ; then
+      PROGS+='kitty '
+    fi
+    if [[ $ARG == 'nvim' || $ARG == 'all' ]] ; then
+      PROGS+='neovim '
+    fi
+    if [[ $ARG == 'hyprland' || $ARG == 'all' ]] ; then
+      PROGS+='hyprland swww '
+    fi
+    if [[ $ARG == 'rofi' || $ARG == 'all' ]] ; then
+      PROGS+='rofi-lbonn-wayland-git '
+    fi
+    if [[ $ARG == 'eww' || $ARG == 'all' ]] ; then
+      PROGS+='eww '
+    fi
+    if [[ $ARG == 'tmux' || $ARG == 'all' ]] ; then
+      PROGS+='tmux '
+    fi
+  done
 
-_ensure_installed neovim
-_link nvchad ~/.config/nvim
-_link nvim ~/.config/nvim/lua/custom
+  _ensure_installed $PROGS
+}
 
-_ensure_installed hyprland hyprpaper
-_link hypr ~/.config/hypr
-
-_link rofi ~/.config/rofi
-
-_link eww ~/.config/eww
-
-_link scripts ~/.local/share/scripts
-
-_ensure_installed tmux
-_link tmux ~/.config/tmux
-
-_ensure_installed swayidle swaylock-effects-git
-_link swaylock ~/.config/swaylock
-_link swayidle ~/.config/swayidle
+case "$1" in
+  install)
+    _install $@
+    ;;
+  *)
+    ;;
+esac
