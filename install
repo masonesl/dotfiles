@@ -2,18 +2,23 @@
 
 SCRIPTPATH=$(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)
 
-_link () {
+_safe_link () {
   # check if there is already a file
 	[ -e $2 ] && return
+
+  # create the directory structure if it doesn't exist
 	mkdir --parents $(dirname $1)
-	ln --symbolic $SCRIPTPATH/$1 $2
+
+	ln --symbolic $(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)/$1 $2
 }
 
 _ensure_installed () {
-  # TODO: implement other package manager support (ie. apt, dpkg, portage, etc.)
+  # TODO: implement other package manager support (ie. apt, dpkg, portage, ...)
 
+  # determine all missing packages
 	MISSING=$(pacman -Q $* 2>/dev/stdout 1>/dev/null | awk '{print $3}' | tr -d \')
 
+  # install missing packages if there are any
 	[ -z $MISSING ] || echo "paru -S $(echo $MISSING)"
 }
 
@@ -47,10 +52,44 @@ _install() {
   _ensure_installed $PROGS
 }
 
+_link() {
+  # ensure that $XDG_CONFIG_HOME is set
+  if [ -z $XDG_CONFIG_HOME ] ; then
+    echo "'XDG_CONFIG_HOME' is not set." >&2
+    echo "It should be set (likely to $HOME/.config) to link configs."
+    return -1
+  fi
+
+  for ARG in $@ ; do
+    if [[ $ARG == 'zsh' || $ARG == 'all' ]] ; then
+      _safe_link zsh $XDG_CONFIG_HOME/zsh
+    fi
+    if [[ $ARG == 'kitty' || $ARG == 'all' ]] ; then
+      _safe_link kitty $XDG_CONFIG_HOME/kitty
+    fi
+    if [[ $ARG == 'nvim' || $ARG == 'all' ]] ; then
+      _safe_link nvim $XDG_CONFIG_HOME/nvim
+    fi
+    if [[ $ARG == 'hyprland' || $ARG == 'all' ]] ; then
+      _safe_link hypr $XDG_CONFIG_HOME/hypr
+    fi
+    if [[ $ARG == 'rofi' || $ARG == 'all' ]] ; then
+      _safe_link rofi $XDG_CONFIG_HOME/rofi
+    fi
+    if [[ $ARG == 'eww' || $ARG == 'all' ]] ; then
+      _safe_link eww $XDG_CONFIG_HOME/eww
+    fi
+    if [[ $ARG == 'tmux' || $ARG == 'all' ]] ; then
+      _safe_link tmux $XDG_CONFIG_HOME/tmux
+    fi
+  done
+}
+
 case "$1" in
   install)
-    _install $@
-    ;;
+    _install $@ ;;
+  link)
+    _link $@ ;;
   *)
     ;;
 esac
