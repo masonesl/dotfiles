@@ -1,7 +1,5 @@
 #!/bin/bash
 
-SCRIPTPATH=$(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)
-
 _safe_link () {
   # check if there is already a file
 	[ -e $2 ] && return
