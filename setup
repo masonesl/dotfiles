@@ -90,6 +90,10 @@ case "$1" in
     _install $@ ;;
   link)
     _link $@ ;;
+  everything)
+    ./setup install all
+    ./setup link all
+    ;;
   *)
     ;;
 esac
