@@ -30,7 +30,7 @@ pub mod workspaces {
     #[derive(Args, Debug)]
     pub struct GotoArgs {
         #[arg()]
-        pub id: i32,
+        pub id: usize,
 
         #[arg(value_enum)]
         pub monitor: Option<config::workspaces::MonitorPreset>,

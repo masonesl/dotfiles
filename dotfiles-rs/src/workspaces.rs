@@ -5,14 +5,11 @@ use hyprland::{
     }
 };
 
+#[derive(Debug)]
 struct NamedWorkspace<'a> {
     unique_id: usize,
     display_name: &'a str,
     is_active: bool,
-}
-
-struct UnnamedWorkspace {
-    unique_id: usize,
 }
 
 impl<'a> NamedWorkspace<'a> {
@@ -30,27 +27,44 @@ impl<'a> NamedWorkspace<'a> {
         print!("\"active\": {}", self.is_active);
         print!("}}");
     }
-}
 
-impl UnnamedWorkspace {
-    fn print_json(&self, display_id_clamp: usize) {
-        print!("\"{}\": {{", self.unique_id);
-        print!("\"display\": \"{}\",", self.unique_id % display_id_clamp);
-        print!("\"active\": true");
-        print!("}}");
+    fn find_by_id_mut(list: &mut Vec<Self>, id: usize) -> Option<&mut Self> {
+        return list
+            .iter_mut()
+            .find_map(|named| {
+                if named.unique_id == id {
+                    Some(named)
+                } else {
+                    None
+                }
+            });
+    }
+
+    fn find_by_id(list: &Vec<Self>, id: usize) -> Option<&Self> {
+        return list
+            .iter()
+            .find_map(|named| {
+                if named.unique_id == id {
+                    Some(named)
+                } else {
+                    None
+                }
+            });
     }
 }
 
 pub mod monitor {
-    use super::*;
+    use core::panic;
 
-    static NAMED_ALLOC: usize = 4;
-    static UNNAMED_ALLOC: usize = 6;
+    use super::*;
+    use crate::config::workspaces::{NAMED_ALLOC, UNNAMED_ALLOC};
+
+    const ALL_ALLOC: usize = NAMED_ALLOC + UNNAMED_ALLOC;
 
     pub struct MonitorContainer<'a> {
         unique_name: &'a str,                      // unique monitor name (ie. HDMI-A-1)
         named_workspaces: Vec<NamedWorkspace<'a>>, // workspaces that should always be shown
-        unnamed_workspaces: Vec<UnnamedWorkspace>, // workspaces that should be shown if they exist
+        unnamed_workspaces: Vec<usize>,            // workspaces that should be shown if they exist
     }
 
     impl<'a> MonitorContainer<'a> {
@@ -59,33 +73,26 @@ pub mod monitor {
             return Self {
                 unique_name,
                 named_workspaces: Vec::<NamedWorkspace>::with_capacity(NAMED_ALLOC),
-                unnamed_workspaces: Vec::<UnnamedWorkspace>::with_capacity(UNNAMED_ALLOC),
-            };
-        }
-
-        #[allow(unused)]
-        pub fn new_with_alloc(unique_name: &'a str, named_alloc: usize, unnamed_alloc: usize) -> Self {
-            return Self {
-                unique_name,
-                named_workspaces: Vec::<NamedWorkspace>::with_capacity(named_alloc),
-                unnamed_workspaces: Vec::<UnnamedWorkspace>::with_capacity(unnamed_alloc),
+                unnamed_workspaces: Vec::<usize>::with_capacity(UNNAMED_ALLOC),
             };
         }
 
         pub fn add_named_workspace(&mut self, unique_id: usize, display_name: &'a str) {
+            /* NOTICE: push_within_capacity() is currently considered unstable! */
             self.named_workspaces
-                .push(NamedWorkspace::new(unique_id, display_name));
+                .push_within_capacity(NamedWorkspace::new(unique_id, display_name))
+                .unwrap();
         }
 
-        pub fn update(&mut self) -> Result<usize, HyprError> {
+        pub fn update(&mut self) {
             // set all workspaces to inactive
-            self.named_workspaces.iter_mut().for_each(|named| named.is_active = false);
+            self.named_workspaces
+                .iter_mut()
+                .for_each(|named| named.is_active = false);
+
             self.unnamed_workspaces.clear();
 
-            let workspaces = hyprland::data::Workspaces::get()?;
-
-            // TODO: maybe move this to a struct member since it shouldn't change
-            let workspace_id_clamp = self.named_workspaces.len() + self.unnamed_workspaces.capacity();
+            let workspaces = hyprland::data::Workspaces::get().unwrap();
 
             for workspace in workspaces {
                 // ignore workspaces not on specified monitor
@@ -93,20 +100,58 @@ pub mod monitor {
                     continue;
                 }
 
-                let relative_workspace_id = (workspace.id as usize - 1) % workspace_id_clamp; 
+                match NamedWorkspace::find_by_id_mut(&mut self.named_workspaces, workspace.id as usize) {
+                    Some(named) => named.is_active = true,
+                    None => {
+                        self.unnamed_workspaces
+                            .push_within_capacity(workspace.id as usize)
+                            .unwrap();
+                    },
+                };
 
-                if relative_workspace_id < self.named_workspaces.len() {
-                    self.named_workspaces[relative_workspace_id].is_active = true;
-                } else {
-                    self.unnamed_workspaces.push(UnnamedWorkspace{unique_id: workspace.id as usize});
-                }
             }
+        }
 
-            return Ok(workspace_id_clamp);
+        pub fn goto_workspace(&mut self, workspace_id: usize) {
+            use hyprland::dispatch::*;
+
+            self.update();
+
+            /* Use the smallest id in the named workspaces as the first workspace on
+             * the monitor. This assumes that both named and unnamed workspaces are
+             * ordered and that the unnamed workspaces come directly after the named. */
+
+            let absolute_id = match self.named_workspaces
+                .iter()
+                .min_by(|a, b| a.unique_id.cmp(&b.unique_id)) {
+
+                Some(first) => first.unique_id + workspace_id - 1,
+                None        => panic!(),
+            };
+
+            let id = match NamedWorkspace::find_by_id(&self.named_workspaces, absolute_id)
+            {
+                Some(_) => absolute_id,
+                None    => {
+                    match self.unnamed_workspaces
+                        .iter()
+                        .find(absolute_id)
+                    {
+                        Some(_) => absolute_id,
+                        None => panic!(),
+                    }
+                },
+            };
+
+            Dispatch::call(
+                DispatchType::Workspace(
+                    WorkspaceIdentifierWithSpecial::Id(id as i32)
+                )
+            ).unwrap();
         }
 
         pub fn print_json(&mut self) -> Result<(), HyprError> {
-            let workspace_id_clamp = self.update()?;
+            self.update()?;
 
             // output a json object containing each workspace to be displayed with the format:
             //
@@ -144,7 +189,7 @@ pub mod monitor {
                     if self.named_workspaces.len() > 0 {
                         print!(", ");
                     }
-                    first.print_json(workspace_id_clamp);
+                    first.print_json(CLAMP);
                 },
                 None => {},
             }
@@ -153,7 +198,7 @@ pub mod monitor {
                 Some(workspaces) => {
                     workspaces.iter().for_each(|unnamed| {
                         print!(", ");     
-                        unnamed.print_json(workspace_id_clamp)
+                        unnamed.print_json(CLAMP);
                     });
                 },
                 None => {},
@@ -215,7 +260,11 @@ pub mod listen {
 }
 
 pub mod action {
+    use std::{cell::RefCell, rc::Rc};
+
     use hyprland::{dispatch::*, shared::HyprData};
+
+    use super::monitor::MonitorContainer;
 
     pub fn goto_workspace(workspace_id: i32) {
         match hyprland::data::Workspaces::get().unwrap().find_map(|w| {
@@ -234,5 +283,9 @@ pub mod action {
             },
             None => {},
         }
+    }
+
+    pub fn goto_workspace_on_monitor(workspace_id: usize, monitor: Rc<RefCell<MonitorContainer>>) {
+        monitor.borrow_mut().goto_workspace(workspace_id);
     }
 }
