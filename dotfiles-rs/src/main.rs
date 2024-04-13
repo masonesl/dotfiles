@@ -1,3 +1,5 @@
+#![feature(vec_push_within_capacity)]
+
 mod workspaces;
 mod args;
 mod config;
@@ -6,6 +8,8 @@ use clap::Parser;
 use workspaces::action;
 
 use crate::workspaces::{listen, monitor};
+
+// TODO: implement proper error handling where ever possible
 
 fn main() {
     let cli_args = args::workspaces::Args::parse();
@@ -31,8 +35,8 @@ fn main() {
         },
         args::workspaces::Command::Goto(opts) => {
             match opts.monitor {
-                Some(_) => todo!(),
-                None => action::goto_workspace(opts.id),
+                Some(mon) => action::goto_workspace_on_monitor(opts.id, mon.get()),
+                None => action::goto_workspace(opts.id as i32),
             }
         },
     }
