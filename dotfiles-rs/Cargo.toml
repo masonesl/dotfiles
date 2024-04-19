@@ -6,6 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-hyprland = "=0.3.13"
-clap     = { version = "4.5.4", features = ["derive"] }
-indexmap = { git = "https://github.com/masonesl/indexmap.git" }
+hyprland  = "=0.3.13"
+clap      = { version = "4.5.4", features = ["derive"] }
+indexmap  = { git = "https://github.com/masonesl/indexmap.git" }
+serde_json = "1.0.116"
