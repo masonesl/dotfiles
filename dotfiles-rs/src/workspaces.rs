@@ -127,6 +127,7 @@ pub mod monitor {
                 todo!()
             };
 
+            // TODO: handle result
             dispatch!(
                 Workspace,
                 WorkspaceIdentifierWithSpecial::Id(*new_id as i32)
@@ -140,7 +141,8 @@ pub mod monitor {
 
             self.update();
 
-            // move to a workspace one past the last workspace
+            // move to a workspace one past the last
+            // TODO: handle result
             dispatch!(
                 Workspace,
                 WorkspaceIdentifierWithSpecial::Id(
@@ -202,7 +204,7 @@ pub mod listen {
         let mut listener = hyprland::event_listener::EventListener::new();
 
         listener.add_workspace_change_handler(move |_| {
-            let monitors = match hyprland::data::Monitors::get() {
+            let mut monitors = match hyprland::data::Monitors::get() {
                 Ok(m)    => m,
                 Err(err) => {
                     eprintln!("{}", err);
@@ -210,11 +212,16 @@ pub mod listen {
                 },
             };
 
-            for mon in monitors {
-                if mon.name == monitor_name {
-                    println!("{}", mon.active_workspace.id);
-                    break;
+            match monitors.find_map(|m|
+                if m.name == monitor_name {
+                    Some(m)
+                } else {
+                    None
                 }
+            )
+            {
+                Some(m) => println!("{}", m.active_workspace.id),
+                None    => {}
             }
         });
 
@@ -225,24 +232,32 @@ pub mod listen {
 pub mod action {
     use std::{cell::RefCell, rc::Rc};
 
-    use hyprland::{dispatch::*, shared::HyprData};
+    use hyprland::shared::HyprData;
 
     use super::monitor::MonitorContainer;
 
     pub fn goto_workspace(workspace_id: i32) {
-        match hyprland::data::Workspaces::get().unwrap().find_map(|w| {
-            if w.id == workspace_id {
-                Some(w)
-            } else {
-                None
-            }
-        }) {
+        use hyprland::dispatch;
+        use hyprland::dispatch::*;
+
+        // TODO: handle result
+        match hyprland::data::Workspaces::get()
+            .unwrap()
+            .find_map(|w|
+                if w.id == workspace_id {
+                    Some(w)
+                } else {
+                    None
+                }
+            )
+        {
             Some(_) => {
-                Dispatch::call(
-                    DispatchType::Workspace(
-                        WorkspaceIdentifierWithSpecial::Id(workspace_id)
-                    )
-                ).unwrap();
+                // TODO: handle result
+                dispatch!(
+                    Workspace,
+                    WorkspaceIdentifierWithSpecial::Id(workspace_id)
+                )
+                .unwrap();
             },
             None => {},
         }
