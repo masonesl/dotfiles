@@ -16,6 +16,8 @@ pub mod workspaces {
         Current(ListenArgs),
 
         Goto(GotoArgs),
+
+        Create(CreateArgs),
     }
 
     #[derive(Args, Debug)]
@@ -34,5 +36,11 @@ pub mod workspaces {
 
         #[arg(value_enum)]
         pub monitor: Option<config::workspaces::MonitorPreset>,
+    }
+
+    #[derive(Args, Debug)]
+    pub struct CreateArgs {
+        #[arg(value_enum)]
+        pub monitor: config::workspaces::MonitorPreset,
     }
 }
