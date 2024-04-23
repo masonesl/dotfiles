@@ -31,6 +31,7 @@ impl<'a> NamedWorkspace<'a> {
 }
 
 pub mod monitor {
+    use hyprland::dispatch;
     use indexmap::{
         map::IndexMap,
         set::IndexSet,
@@ -105,43 +106,49 @@ pub mod monitor {
             }
         }
 
-        // pub fn goto_workspace(&mut self, workspace_id: usize) {
-        //     use hyprland::dispatch::*;
-        //
-        //     self.update();
-        //
-        //     /* Use the smallest id in the named workspaces as the first workspace on
-        //      * the monitor. This assumes that both named and unnamed workspaces are
-        //      * ordered and that the unnamed workspaces come directly after the named. */
-        //
-        //     let absolute_id = match self.named_workspaces
-        //         .iter()
-        //         .min_by(|a, b| a.unique_id.cmp(&b.unique_id)) {
-        //
-        //         Some(first) => first.unique_id + workspace_id - 1,
-        //         None        => panic!(),
-        //     };
-        //
-        //     let id = match NamedWorkspace::find_by_id(&self.named_workspaces, absolute_id)
-        //     {
-        //         Some(_) => absolute_id,
-        //         None    => {
-        //             match self.unnamed_workspaces
-        //                 .iter()
-        //                 .find(absolute_id)
-        //             {
-        //                 Some(_) => absolute_id,
-        //                 None => panic!(),
-        //             }
-        //         },
-        //     };
-        //
-        //     Dispatch::call(
-        //         DispatchType::Workspace(
-        //             WorkspaceIdentifierWithSpecial::Id(id as i32)
-        //         )
-        //     ).unwrap();
-        // }
+        pub fn goto_workspace(&mut self, workspace_id: usize) {
+            use hyprland::dispatch;
+            use hyprland::dispatch::*;
+
+            self.update();
+
+            let workspace_index = workspace_id - 1;
+
+            let new_id = if workspace_index < NAMED_ALLOC {
+                self.named_workspaces
+                    .get_index(workspace_index)
+                    .unwrap()
+                    .0
+            } else if workspace_index < ALL_ALLOC {
+                self.unnamed_workspaces
+                    .get_index(workspace_index - NAMED_ALLOC)
+                    .unwrap()
+            } else {
+                todo!()
+            };
+
+            dispatch!(
+                Workspace,
+                WorkspaceIdentifierWithSpecial::Id(*new_id as i32)
+            )
+            .unwrap();
+        }
+
+        pub fn create_workspace(&mut self) {
+            use hyprland::dispatch;
+            use hyprland::dispatch::*;
+
+            self.update();
+
+            // move to a workspace one past the last workspace
+            dispatch!(
+                Workspace,
+                WorkspaceIdentifierWithSpecial::Id(
+                    (NAMED_ALLOC + self.unnamed_workspaces.len() + 1) as i32
+                )
+            )
+            .unwrap();
+        }
 
         pub fn get_json(&mut self) -> String {
             self.update();
@@ -242,6 +249,10 @@ pub mod action {
     }
 
     pub fn goto_workspace_on_monitor(workspace_id: usize, monitor: Rc<RefCell<MonitorContainer>>) {
-        // monitor.borrow_mut().goto_workspace(workspace_id);
+        monitor.borrow_mut().goto_workspace(workspace_id);
+    }
+
+    pub fn create_workspace(monitor: Rc<RefCell<MonitorContainer>>) {
+        monitor.borrow_mut().create_workspace();
     }
 }

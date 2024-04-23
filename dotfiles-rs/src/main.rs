@@ -39,5 +39,8 @@ fn main() {
                 None => action::goto_workspace(opts.id as i32),
             }
         },
+        args::workspaces::Command::Create(opts) => {
+            action::create_workspace(opts.monitor.get());
+        }
     }
 }
