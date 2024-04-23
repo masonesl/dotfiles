@@ -19,7 +19,10 @@ fn main() {
             let monitor_container = opts.monitor.get();
 
             if opts.oneshot {
-                todo!();
+                println!(
+                    "{}",
+                    monitor_container.borrow_mut().get_json()
+                );
             } else {
                 listen::active(monitor_container);
             }
