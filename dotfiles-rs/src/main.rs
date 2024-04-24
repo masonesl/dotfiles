@@ -43,7 +43,11 @@ fn main() {
             }
         },
         args::workspaces::Command::Create(opts) => {
-            action::create_workspace(opts.monitor.get());
+            if opts.window {
+                action::window_to_new_workspace(opts.monitor.get());
+            } else {
+                action::create_workspace(opts.monitor.get());
+            }
         }
     }
 }

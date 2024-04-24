@@ -141,13 +141,43 @@ pub mod monitor {
 
             self.update();
 
+            let first_workspace = self
+                .named_workspaces
+                .get_index(0)
+                .unwrap()
+                .0;
+
             // move to a workspace one past the last
             // TODO: handle result
             dispatch!(
                 Workspace,
                 WorkspaceIdentifierWithSpecial::Id(
-                    (NAMED_ALLOC + self.unnamed_workspaces.len() + 1) as i32
+                    (NAMED_ALLOC + self.unnamed_workspaces.len() + *first_workspace) as i32
                 )
+            )
+            .unwrap();
+        }
+
+        pub fn window_to_new_workspace(&mut self) {
+            use hyprland::dispatch;
+            use hyprland::dispatch::*;
+
+            self.update();
+
+            let first_workspace = self
+                .named_workspaces
+                .get_index(0)
+                .unwrap()
+                .0;
+
+            // move the focused window to one past the last workspace
+            // TODO: handle result
+            dispatch!(
+                MoveToWorkspace,
+                WorkspaceIdentifierWithSpecial::Id(
+                    (NAMED_ALLOC + self.unnamed_workspaces.len() + *first_workspace) as i32
+                ),
+                None
             )
             .unwrap();
         }
@@ -204,27 +234,23 @@ pub mod listen {
         let mut listener = hyprland::event_listener::EventListener::new();
 
         listener.add_workspace_change_handler(move |_| {
-            let mut monitors = match hyprland::data::Monitors::get() {
-                Ok(m)    => m,
-                Err(err) => {
-                    eprintln!("{}", err);
-                    return ();
-                },
-            };
-
-            match monitors.find_map(|m|
-                if m.name == monitor_name {
-                    Some(m)
-                } else {
-                    None
-                }
-            )
+            // TODO: handle result
+            match hyprland::data::Monitors::get()
+                .unwrap()
+                .find_map(|m|
+                    if m.name == monitor_name {
+                        Some(m)
+                    } else {
+                        None
+                    }
+                )
             {
                 Some(m) => println!("{}", m.active_workspace.id),
                 None    => {}
             }
         });
 
+        // TODO: handle result
         listener.start_listener().unwrap();
     }
 }
@@ -270,4 +296,9 @@ pub mod action {
     pub fn create_workspace(monitor: Rc<RefCell<MonitorContainer>>) {
         monitor.borrow_mut().create_workspace();
     }
+
+    pub fn window_to_new_workspace(monitor: Rc<RefCell<MonitorContainer>>) {
+        monitor.borrow_mut().window_to_new_workspace();
+    }
+
 }

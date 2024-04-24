@@ -40,6 +40,9 @@ pub mod workspaces {
 
     #[derive(Args, Debug)]
     pub struct CreateArgs {
+        #[arg(short, long)]
+        pub window: bool,
+
         #[arg(value_enum)]
         pub monitor: config::workspaces::MonitorPreset,
     }
