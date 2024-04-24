@@ -12,6 +12,6 @@
 
     (label
       :class "clock-text"
-      :text clock-text)
+      :text "󰥔   ${clock-text}")
   )
 )
