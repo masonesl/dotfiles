@@ -2,6 +2,7 @@ pub mod workspaces {
     use clap::ValueEnum;
     use std::{rc::Rc, cell::RefCell};
     use crate::workspaces::monitor::MonitorContainer;
+    use hyprland::{data::CursorPosition, shared::HyprData};
 
     macro_rules! new_monitor {
         ($monitor:expr, $(($id:expr => $display:expr)),*) => {
@@ -27,9 +28,19 @@ pub mod workspaces {
         Primary,
         Secondary,
         // add presets here...
+        Auto
     }
 
     impl MonitorPreset {
+
+        fn auto(&self) -> Self {
+            return if CursorPosition::get().unwrap().x > 2560 {
+                Self::Primary
+            } else {
+                Self::Secondary
+            }
+        }
+
         pub fn get(&self) -> Rc<RefCell<MonitorContainer<'static>>> {
             return match self {
                 Self::Primary => new_monitor!(
@@ -47,6 +58,7 @@ pub mod workspaces {
                     (14 => "")
                 ),
                 // configure workspaces for presets here...
+                Self::Auto => self.auto().get()
             };
         }
 
@@ -55,6 +67,7 @@ pub mod workspaces {
                 Self::Primary   => "DP-1",
                 Self::Secondary => "HDMI-A-1",
                 // configure monitor names for presets here...
+                Self::Auto      => self.auto().get_name()
             };
         }
     }

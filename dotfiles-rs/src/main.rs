@@ -1,5 +1,3 @@
-#![feature(vec_push_within_capacity)]
-
 mod workspaces;
 mod args;
 mod config;
@@ -7,7 +5,7 @@ mod config;
 use clap::Parser;
 use workspaces::action;
 
-use crate::workspaces::{listen, monitor};
+use crate::workspaces::listen;
 
 // TODO: implement proper error handling where ever possible
 
