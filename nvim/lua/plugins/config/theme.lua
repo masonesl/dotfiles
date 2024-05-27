@@ -143,6 +143,7 @@ local function config()
       h.Special = {
         fg = c.red,
       }
+
     end,
   })
 end

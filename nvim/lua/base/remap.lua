@@ -2,6 +2,7 @@ local k = vim.keymap
 
 -- Remap the leader to space
 vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
 -- Allow for moving selection in visual mode
 k.set('v', 'J', ':m \'>+1<CR>gv=gv')
@@ -23,4 +24,3 @@ k.set('n', '<C-l>', ':wincmd l<CR>');
 k.set('n', '<leader>tr', function ()
   require('trouble').toggle()
 end)
-
