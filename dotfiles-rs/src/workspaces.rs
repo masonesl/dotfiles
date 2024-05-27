@@ -55,7 +55,6 @@ pub mod monitor {
     }
 
     impl<'a> MonitorContainer<'a> {
-        #[allow(unused)]
         pub fn new(unique_name: &'a str) -> Self {
             return Self {
                 unique_name,
@@ -73,7 +72,7 @@ pub mod monitor {
                     unique_id,
                     NamedWorkspace::new(display_name)
                 )
-                .unwrap();
+                    .unwrap();
         }
 
         pub fn update(&mut self) {
@@ -92,6 +91,7 @@ pub mod monitor {
                     continue;
                 }
 
+                // put workspace into named or unnamed
                 match self.named_workspaces
                     .get_mut(&(workspace.id as usize))
                 {
@@ -107,24 +107,24 @@ pub mod monitor {
         }
 
         pub fn goto_workspace(&mut self, workspace_id: usize) {
-            use hyprland::dispatch;
             use hyprland::dispatch::*;
 
             self.update();
 
             let workspace_index = workspace_id - 1;
 
-            let new_id = if workspace_index < NAMED_ALLOC {
-                self.named_workspaces
-                    .get_index(workspace_index)
-                    .unwrap()
-                    .0
-            } else if workspace_index < ALL_ALLOC {
-                self.unnamed_workspaces
-                    .get_index(workspace_index - NAMED_ALLOC)
-                    .unwrap()
-            } else {
-                todo!()
+            let new_id = 
+                if workspace_index < NAMED_ALLOC {
+                    self.named_workspaces
+                        .get_index(workspace_index)
+                        .unwrap()
+                        .0
+                } else if workspace_index < ALL_ALLOC {
+                    self.unnamed_workspaces
+                        .get_index(workspace_index - NAMED_ALLOC)
+                        .unwrap()
+                } else {
+                    todo!()
             };
 
             // TODO: handle result
@@ -132,11 +132,10 @@ pub mod monitor {
                 Workspace,
                 WorkspaceIdentifierWithSpecial::Id(*new_id as i32)
             )
-            .unwrap();
+                .unwrap();
         }
 
         pub fn create_workspace(&mut self) {
-            use hyprland::dispatch;
             use hyprland::dispatch::*;
 
             self.update();
@@ -155,11 +154,10 @@ pub mod monitor {
                     (NAMED_ALLOC + self.unnamed_workspaces.len() + *first_workspace) as i32
                 )
             )
-            .unwrap();
+                .unwrap();
         }
 
         pub fn window_to_new_workspace(&mut self) {
-            use hyprland::dispatch;
             use hyprland::dispatch::*;
 
             self.update();
@@ -179,7 +177,7 @@ pub mod monitor {
                 ),
                 None
             )
-            .unwrap();
+                .unwrap();
         }
 
         pub fn get_json(&mut self) -> String {
@@ -227,7 +225,10 @@ pub mod listen {
         });
 
         // TODO: handle result
-        listener.start_listener().unwrap();
+        match listener.start_listener() {
+            Ok(_) => {},
+            Err(e) => eprintln!("{}", e),
+        };
     }
 
     pub fn current(monitor_name: &'static str) {
@@ -237,6 +238,7 @@ pub mod listen {
             // TODO: handle result
             match hyprland::data::Monitors::get()
                 .unwrap()
+                .into_iter()
                 .find_map(|m|
                     if m.name == monitor_name {
                         Some(m)
@@ -269,6 +271,7 @@ pub mod action {
         // TODO: handle result
         match hyprland::data::Workspaces::get()
             .unwrap()
+            .into_iter()
             .find_map(|w|
                 if w.id == workspace_id {
                     Some(w)
@@ -283,7 +286,7 @@ pub mod action {
                     Workspace,
                     WorkspaceIdentifierWithSpecial::Id(workspace_id)
                 )
-                .unwrap();
+                    .unwrap();
             },
             None => {},
         }
