@@ -26,6 +26,8 @@ o.cursorline     = true
 
 o.clipboard      = 'unnamedplus'
 
+o.timeoutlen     = 300
+
 o.formatoptions:remove({ 'c', 'r', 'o' })
 
 g.border = function(hl)

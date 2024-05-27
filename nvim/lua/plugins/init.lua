@@ -9,7 +9,7 @@ return {
   },
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.5',
+    tag = '0.1.6',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('plugins.config.telescope').setup()
@@ -24,8 +24,10 @@ return {
   },
   {
     'ThePrimeagen/harpoon',
-    -- This branch will be merged into main soon
+
+    -- NOTE: this will be merged into mainline 4/20 or 7/9
     branch = 'harpoon2',
+
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
@@ -93,5 +95,14 @@ return {
   },
   {
     'elkowar/yuck.vim',
+  },
+  {
+    'folke/todo-comments.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+
+    -- TODO: add plugin config
+    opts = {},
   },
 }

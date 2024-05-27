@@ -2,8 +2,14 @@ local c = {}
 
 local function config()
   require('Comment').setup({
-    opleader = { line = '<leader>/' },
-    toggler = { line = '<leader>/' },
+    opleader = {
+      line = '<leader>/',
+      block = '<leader>\'',
+    },
+    toggler = {
+      line = '<leader>/',
+      block = '<leader>\'',
+    },
     mappings = {
       basic = true,
       extra = false,
