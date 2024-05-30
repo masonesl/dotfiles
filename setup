@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 _safe_link () {
   # check if there is already a file
@@ -83,14 +83,26 @@ _link() {
   done
 }
 
+_workspaces() {
+  cd ./dotfiles-rs/
+
+  cargo build --bin workspace-rs --release
+
+  cd ..
+  _safe_link ./dotfiles-rs/target/release/workspace-rs ./scripts/workspace-rs
+}
+
 case "$1" in
   install)
     _install $@ ;;
   link)
     _link $@ ;;
+  workspaces)
+    _workspaces ;;
   everything)
     ./setup install all
     ./setup link all
+    ./setup workspaces
     ;;
   *)
     ;;
