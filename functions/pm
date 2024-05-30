@@ -1,0 +1,26 @@
+#!/usr/bin/env zsh
+
+PROJECTS_DIR="$HOME/Documents/Projects/"
+
+function pm {
+  case "$1" in
+    o)
+      mkdir --parents "$PROJECTS_DIR/$2"
+      pushd "$PROJECTS_DIR/$2"
+      tmux new-session -s "$2"
+      popd
+      ;;
+    op)
+      mkdir --parents "$2"
+      pushd "$2"
+      tmux new-session -s $(basename "$2")
+      popd
+      ;;
+    ot)
+      mkdir --parents "/tmp/$USER-projects/$2"
+      pushd "/tmp/$USER-projects/$2"
+      tmux new-session -s $2
+      popd
+      ;;
+  esac
+}
