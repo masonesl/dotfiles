@@ -46,6 +46,7 @@ export FPATH=$FPATH:~/.local/share/zfunctions
 autoload unknow
 autoload t
 autoload g
+autoload pm
 
 ###########
 # Plugins #
@@ -72,4 +73,4 @@ autoload -U compinit; compinit
 compdef g=git
 compdef t=tmux
 
-compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
+# compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
