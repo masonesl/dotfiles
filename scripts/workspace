@@ -74,7 +74,7 @@ _move_window_to() {
 
 _current_listener() {
   _get_current $1
-  socat -U - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock |
+  socat -U - UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock |
     while read -r line ; do
       ( echo $line | grep -q workspace ) && _get_current $1
     done
@@ -82,7 +82,7 @@ _current_listener() {
 
 _active_listener() {
   _get_active $1
-  socat -U - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock |
+  socat -U - UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock |
     while read -r line ; do
       ( echo $line | grep -q workspace ) && _get_active $1
     done
