@@ -1,34 +1,34 @@
 ;; Listen for workspaces that exist at any given time per monitor
 (deflisten primary-workspaces
-  :initial "[]"
-  "sh ~/.local/share/scripts/workspace current-listener 0")
+  :initial "{}"
+  "$XDG_DATA_HOME/scripts/workspace-rs active primary")
 
 (deflisten secondary-workspaces
-  :initial "[]"
-  "sh ~/.local/share/scripts/workspace current-listener 1")
+  :initial "{}"
+  "$XDG_DATA_HOME/scripts/workspace-rs active secondary")
 
-;; Listen for the active workspace on each monitor
-(deflisten primary-active-workspace
+;; Listen for the current workspace on each monitor
+(deflisten primary-current-workspace
   :initial "1"
-  "sh ~/.local/share/scripts/workspace active-listener 0")
+  "$XDG_DATA_HOME/scripts/workspace-rs current primary")
 
-(deflisten secondary-active-workspace
+(deflisten secondary-current-workspace
   :initial "11"
-  "sh ~/.local/share/scripts/workspace active-listener 1")
+  "$XDG_DATA_HOME/scripts/workspace-rs current secondary")
 
 ;; Define a widget for an individual workspace button
 (defwidget workspace-button [workspace]
   (eventbox
     :class "workspace-button 
-           ${workspace == primary-active-workspace || 
-             workspace == secondary-active-workspace ? "active" : "current"}"
+           ${workspace.id == primary-current-workspace || 
+             workspace.id == secondary-current-workspace ? "active" : "current"}"
 
-    :onclick "~/.local/share/scripts/workspace switch exact ${workspace}"
+    :onclick "$XDG_DATA_HOME/scripts/workspace-rs goto ${workspace.id}"
 
     (label
       :class "workspace-text"
 
-      :text "")
+      :text "${workspace.display}")
   )
 )
 
@@ -43,7 +43,7 @@
 
     (label
       :visible false
-      :text "${secondary-active-workspace} ${primary-active-workspace}")
+      :text "${secondary-current-workspace} ${primary-current-workspace}")
 
     (for workspace in workspaces
       (workspace-button
