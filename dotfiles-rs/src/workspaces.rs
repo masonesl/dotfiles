@@ -4,7 +4,6 @@ use hyprland::{
 };
 use serde_json::{
     value as json_value,
-    map   as json_map,
     json,
 };
 
@@ -22,8 +21,9 @@ impl<'a> NamedWorkspace<'a> {
         };
     }
 
-    fn get_json(&self) -> json_value::Value {
+    fn get_json(&self, id: usize) -> json_value::Value {
         json!({
+            "id": id,
             "display": self.display_name,
             "active":  self.is_active
         })
@@ -157,6 +157,35 @@ pub mod monitor {
                 .unwrap();
         }
 
+        pub fn window_to_workspace(&mut self, workspace_id: usize) {
+            use hyprland::dispatch::*;
+
+            self.update();
+
+            let workspace_index = workspace_id - 1;
+
+            let new_id = 
+                if workspace_index < NAMED_ALLOC {
+                    self.named_workspaces
+                        .get_index(workspace_index)
+                        .unwrap()
+                        .0
+                } else if workspace_index < ALL_ALLOC {
+                    self.unnamed_workspaces
+                        .get_index(workspace_index - NAMED_ALLOC)
+                        .unwrap()
+                } else {
+                    todo!()
+            };
+
+            dispatch!(
+                MoveToWorkspace,
+                WorkspaceIdentifierWithSpecial::Id(*new_id as i32),
+                None
+            )
+                .unwrap();
+        }
+
         pub fn window_to_new_workspace(&mut self) {
             use hyprland::dispatch::*;
 
@@ -183,19 +212,16 @@ pub mod monitor {
         pub fn get_json(&mut self) -> String {
             self.update();
 
-            let mut json_object = json_map::Map::with_capacity(ALL_ALLOC);
+            let mut json_array = Vec::<json_value::Value>::with_capacity(ALL_ALLOC);
 
             for (id, workspace) in self.named_workspaces.iter() {
-                json_object.insert(
-                    id.to_string(),
-                    workspace.get_json()
-                );
+                json_array.push(workspace.get_json(*id));
             }
 
             for id in self.unnamed_workspaces.iter() {
-                json_object.insert(
-                    id.to_string(),
+                json_array.push(
                     json!({
+                        "id": *id,
                         "display": id.to_string(),
                         "active": true
                     })
@@ -203,7 +229,7 @@ pub mod monitor {
             }
 
             // TODO: handle result
-            return serde_json::to_string_pretty(&json_object).unwrap();
+            return serde_json::to_string(&json_array).unwrap();
         }
     }
 }
@@ -260,8 +286,6 @@ pub mod listen {
 pub mod action {
     use std::{cell::RefCell, rc::Rc};
 
-    use hyprland::shared::HyprData;
-
     use super::monitor::MonitorContainer;
 
     pub fn goto_workspace(workspace_id: i32) {
@@ -269,27 +293,11 @@ pub mod action {
         use hyprland::dispatch::*;
 
         // TODO: handle result
-        match hyprland::data::Workspaces::get()
-            .unwrap()
-            .into_iter()
-            .find_map(|w|
-                if w.id == workspace_id {
-                    Some(w)
-                } else {
-                    None
-                }
-            )
-        {
-            Some(_) => {
-                // TODO: handle result
-                dispatch!(
-                    Workspace,
-                    WorkspaceIdentifierWithSpecial::Id(workspace_id)
-                )
-                    .unwrap();
-            },
-            None => {},
-        }
+        dispatch!(
+            Workspace,
+            WorkspaceIdentifierWithSpecial::Id(workspace_id)
+        )
+            .unwrap();
     }
 
     pub fn goto_workspace_on_monitor(workspace_id: usize, monitor: Rc<RefCell<MonitorContainer>>) {
@@ -300,8 +308,11 @@ pub mod action {
         monitor.borrow_mut().create_workspace();
     }
 
+    pub fn window_to_workspace(workspace_id: usize, monitor: Rc<RefCell<MonitorContainer>>) {
+        monitor.borrow_mut().window_to_workspace(workspace_id);
+    }
+
     pub fn window_to_new_workspace(monitor: Rc<RefCell<MonitorContainer>>) {
         monitor.borrow_mut().window_to_new_workspace();
     }
-
 }
