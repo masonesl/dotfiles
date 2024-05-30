@@ -2,6 +2,10 @@
   background-color: lighten($bg-color, 20%);
   border-radius: $radius;
 
+  .workspace-text {
+    color: $bg-color;
+  }
+
   .active .workspace-text {
     background-color: $normal-magenta;
     border-radius: $radius;

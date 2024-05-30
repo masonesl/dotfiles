@@ -14,12 +14,14 @@
       margin: 0rem .25rem;
     }
     .current .workspace-text {
-      padding: 0rem .56rem;
+      padding: 0rem 1.28rem;
       margin: 0rem .2rem;
     }
   }
 }
 
+// Because the secondary monitor is bigger, sizes are chosen on it,
+// then multiplied by 0.8 to get the secondary size.
 .secondary-topbar {
   .clock-section {
     font-size: 25px;
@@ -36,7 +38,7 @@
     }
 
     .current .workspace-text {
-      padding: 0rem .7rem;
+      padding: 0rem 1.6rem;
       margin: 0rem .25rem;
     }
   }
