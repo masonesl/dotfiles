@@ -37,7 +37,18 @@ fn main() {
         args::workspaces::Command::Goto(opts) => {
             match opts.monitor {
                 Some(mon) => action::goto_workspace_on_monitor(opts.id, mon.get()),
-                None => action::goto_workspace(opts.id as i32),
+                None      => action::goto_workspace(opts.id as i32),
+            }
+        },
+        args::workspaces::Command::Move(opts) => {
+            match opts.monitor {
+                Some(mon) => action::window_to_workspace(opts.id, mon.get()),
+                None      => {
+                    action::window_to_workspace(
+                        opts.id,
+                        config::workspaces::MonitorPreset::Auto.get()
+                    )
+                }
             }
         },
         args::workspaces::Command::Create(opts) => {
