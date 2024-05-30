@@ -34,6 +34,7 @@ pub mod workspaces {
     impl MonitorPreset {
 
         fn auto(&self) -> Self {
+            // configure how monitor should be selected when "auto" keyword is used
             return if CursorPosition::get().unwrap().x > 2560 {
                 Self::Primary
             } else {
