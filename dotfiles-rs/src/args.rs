@@ -16,6 +16,7 @@ pub mod workspaces {
         Current(ListenArgs),
 
         Goto(GotoArgs),
+        Move(GotoArgs),
 
         Create(CreateArgs),
     }
