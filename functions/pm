@@ -5,22 +5,23 @@ PROJECTS_DIR="$HOME/Documents/Projects/"
 function pm {
   case "$1" in
     o)
-      mkdir --parents "$PROJECTS_DIR/$2"
-      pushd "$PROJECTS_DIR/$2"
-      tmux new-session -s "$2"
-      popd
+      PROJECT_PATH="$PROJECTS_DIR/$2"
+      PROJECT_NAME="$2"
       ;;
     op)
-      mkdir --parents "$2"
-      pushd "$2"
-      tmux new-session -s $(basename "$2")
-      popd
+      PROJECT_PATH="$2"
+      PROJECT_NAME=$(basename "$2")
       ;;
     ot)
-      mkdir --parents "/tmp/$USER-projects/$2"
-      pushd "/tmp/$USER-projects/$2"
-      tmux new-session -s $2
-      popd
+      PROJECT_PATH="/tmp/$USER-projects/$2"
+      PROJECT_NAME="$2"
       ;;
+    *)
+      return ;;
   esac
+
+  mkdir --parents "$PROJECT_PATH"
+  pushd "$PROJECT_PATH"
+  tmux new-session -s "$PROJECT_NAME"
+  popd
 }
