@@ -1,6 +1,6 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
-g() {
+function g {
   OPTIONS=()
   ARGS=("$@")
 
@@ -15,6 +15,8 @@ g() {
       OPTIONS+=("add") ;;
     c)
       OPTIONS+=("commit" "-m") ;;
+    d)
+      OPTIONS+=("diff") ;;
     *)
       git $ARGS
       return
