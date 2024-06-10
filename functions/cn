@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+function cn {
+  pushd "$1"
+  nvim .
+  popd
+}

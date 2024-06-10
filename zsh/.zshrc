@@ -47,6 +47,7 @@ autoload unknow
 autoload t
 autoload g
 autoload pm
+autoload cn
 
 ###########
 # Plugins #
