@@ -6,6 +6,7 @@ HISTSIZE=100000
 SAVEHIST=100000
 
 export PATH=$PATH:~/.local/share/scripts/
+export PATH=$PATH:~/.local/bin/
 
 #############
 # Variables #
@@ -29,6 +30,7 @@ alias p='pacman'
 alias s='sudo '
 alias n='nvim'
 alias c='cd'
+alias m='mkdir --parents'
 
 alias h='history 1 | grep'
 

@@ -1,6 +1,7 @@
 require('base.set')
 require('base.remap')
 require('base.command')
+require('base.hypr')
 
 -- Setup the lazy plugin manager
 local lazypath = vim.fn.stdpath('data') .. 'lazy/lazy.nvim'
