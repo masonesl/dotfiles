@@ -1,6 +1,6 @@
 pub mod workspaces {
     use clap::ValueEnum;
-    use std::{rc::Rc, cell::RefCell};
+    use std::{rc::Rc, cell::RefCell, env};
     use crate::workspaces::monitor::MonitorContainer;
     use hyprland::{data::CursorPosition, shared::HyprData};
 
@@ -27,6 +27,7 @@ pub mod workspaces {
     pub enum MonitorPreset {
         Primary,
         Secondary,
+        Laptop,
         // add presets here...
         Auto
     }
@@ -35,7 +36,9 @@ pub mod workspaces {
 
         fn auto(&self) -> Self {
             // configure how monitor should be selected when "auto" keyword is used
-            return if CursorPosition::get().unwrap().x > 2560 {
+            return if env::var("LAPTOP").is_ok() {
+                Self::Laptop
+            } else if CursorPosition::get().unwrap().x > 2560 {
                 Self::Primary
             } else {
                 Self::Secondary
@@ -58,6 +61,13 @@ pub mod workspaces {
                     (13 => ""),
                     (14 => "")
                 ),
+                Self::Laptop => new_monitor!(
+                    self.get_name(),
+                    (1 => ""),
+                    (2 => ""),
+                    (3 => "󱅯"),
+                    (4 => "")
+                ),
                 // configure workspaces for presets here...
                 Self::Auto => self.auto().get()
             };
@@ -67,6 +77,7 @@ pub mod workspaces {
             return match self {
                 Self::Primary   => "DP-1",
                 Self::Secondary => "HDMI-A-1",
+                Self::Laptop    => "eDP-1",
                 // configure monitor names for presets here...
                 Self::Auto      => self.auto().get_name()
             };
