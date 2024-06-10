@@ -2,22 +2,22 @@
 
 _safe_link () {
   # check if there is already a file
-	[ -e $2 ] && return
+  [ -e $2 ] && return
 
   # create the directory structure if it doesn't exist
-	mkdir --parents $(dirname $1)
+  mkdir --parents $(dirname $1)
 
-	ln --symbolic $(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)/$1 $2
+  ln --symbolic $(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)/$1 $2
 }
 
 _ensure_installed () {
   # TODO: implement other package manager support (ie. apt, dpkg, portage, ...)
 
   # determine all missing packages
-	MISSING=$(pacman -Q $* 2>/dev/stdout 1>/dev/null | awk '{print $3}' | tr -d \')
+  MISSING=$(pacman -Q $* 2>/dev/stdout 1>/dev/null | awk '{print $3}' | tr -d \')
 
   # install missing packages if there are any
-	[ -z $MISSING ] || echo "paru -S $(echo $MISSING)"
+  [ -z $MISSING ] || echo "paru -S $(echo $MISSING)"
 }
 
 _install() {
@@ -84,11 +84,10 @@ _link() {
 }
 
 _workspaces() {
-  cd ./dotfiles-rs/
-
+  pushd ./dotfiles-rs/
   cargo build --bin workspace-rs --release
-
-  cd ..
+  popd
+  
   _safe_link ./dotfiles-rs/target/release/workspace-rs ./scripts/workspace-rs
 }
 
