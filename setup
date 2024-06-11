@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 _safe_link () {
-  # check if there is already a file
-  [ -e $2 ] && return
+  if [ -e $2 ] ; then
+    echo "Not linking '$2', as it already exists."
+    return
+  fi
 
-  # create the directory structure if it doesn't exist
   mkdir --parents $(dirname $1)
-
   ln --symbolic $(cd -- $(dirname $0) > /dev/null 2>&1 ; pwd)/$1 $2
 }
 
