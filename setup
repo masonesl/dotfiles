@@ -69,6 +69,7 @@ _link() {
       _safe_link nvim $XDG_CONFIG_HOME/nvim
     fi
     if [[ $ARG == 'hyprland' || $ARG == 'all' ]] ; then
+      echo "source = ./presets/default.hl" > ./hypr/hyprland.conf
       _safe_link hypr $XDG_CONFIG_HOME/hypr
     fi
     if [[ $ARG == 'rofi' || $ARG == 'all' ]] ; then
@@ -91,6 +92,10 @@ _workspaces() {
   _safe_link ./dotfiles-rs/target/release/workspace-rs ./scripts/workspace-rs
 }
 
+_select_preset() {
+  sed --in-place "s|\(source = \./presets\).*|\1/$1\.hl|" ./hypr/selected.hl
+}
+
 case "$1" in
   install)
     _install $@ ;;
@@ -98,6 +103,8 @@ case "$1" in
     _link $@ ;;
   workspaces)
     _workspaces ;;
+  preset)
+    _select_preset $2 ;;
   everything)
     ./setup install all
     ./setup link all
