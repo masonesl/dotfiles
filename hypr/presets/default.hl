@@ -1,0 +1,7 @@
+source = ../shared/exec.hl
+source = ../shared/general.hl
+source = ../shared/input.hl
+source = ../shared/decoration.hl
+source = ../shared/animations.hl
+source = ../shared/binds.hl
+source = ../shared/rules.hl

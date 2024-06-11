@@ -1,0 +1,13 @@
+input {
+  numlock_by_default = true
+
+  accel_profile = flat
+
+  touchpad {
+    drag_lock = true
+  }
+}
+
+gestures {
+  workspace_swipe = true
+}

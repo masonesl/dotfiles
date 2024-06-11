@@ -1,0 +1,8 @@
+animations {
+  bezier = easeOutQuint, 0.1, 1, 0.1, 1
+
+  animation = windows,    1, 3, easeOutQuint, popin
+  animation = layers,     1, 3, easeOutQuint, fade
+  animation = fade,       1, 3, easeOutQuint
+  animation = workspaces, 1, 3, easeOutQuint, slidefade
+}

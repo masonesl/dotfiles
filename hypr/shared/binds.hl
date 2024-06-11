@@ -1,0 +1,97 @@
+source = ./variables.hl
+
+# layout selection
+bind = $mainMod, M, exec, hyprctl keyword general:layout master
+bind = $mainMod, D, exec, hyprctl keyword general:layout dwindle
+
+bind = $mainMod, W, killactive
+
+# applications
+bind = $mainMod, SPACE,  exec, $launcher
+bind = $mainMod, RETURN, exec, $terminal
+
+bind = $mainMod $launchMod, RETURN, exec, [size 50% 50%; float] $terminal
+
+bind = $mainMod $launchMod, B, exec, $browser
+bind = $mainMod $launchMod, C, exec, $calculator
+bind = $mainMod $launchMod, F, exec, $filemanager
+
+bind = $mainMod $launchMod, K, exec, keepassxc
+
+# floating and fullscreen
+bind = $mainMod,          F, togglefloating
+bind = $mainMod $moveMod, F, fullscreen, 0
+
+# Move to a workspace [1-10] on the focused monitor.
+
+# Workspaces 1-4 are named workspaces, meaning they can always be moved to.
+bind = $mainMod, 1,  exec, $scriptsDir/workspace-rs goto 1  auto
+bind = $mainMod, 2,  exec, $scriptsDir/workspace-rs goto 2  auto
+bind = $mainMod, 3,  exec, $scriptsDir/workspace-rs goto 3  auto
+bind = $mainMod, 4,  exec, $scriptsDir/workspace-rs goto 4  auto
+
+# Workspaces 5-10 are unnamed workspaces, meaning they act as
+# though they are not present when no windows are on them.
+bind = $mainMod, 5,  exec, $scriptsDir/workspace-rs goto 5  auto
+bind = $mainMod, 6,  exec, $scriptsDir/workspace-rs goto 6  auto
+bind = $mainMod, 7,  exec, $scriptsDir/workspace-rs goto 7  auto
+bind = $mainMod, 8,  exec, $scriptsDir/workspace-rs goto 8  auto
+bind = $mainMod, 9,  exec, $scriptsDir/workspace-rs goto 9  auto
+bind = $mainMod, 10, exec, $scriptsDir/workspace-rs goto 10 auto
+
+# Create a new unnamed workspace and move to it.
+bind = $mainMod, N, exec, $scriptsDir/workspace-rs create auto
+
+# Move the focused window to a workspace [1-10] on the focused monitor.
+bind = $mainMod $moveMod, 1,  exec, $scriptsDir/workspace-rs move 1  auto
+bind = $mainMod $moveMod, 2,  exec, $scriptsDir/workspace-rs move 2  auto
+bind = $mainMod $moveMod, 3,  exec, $scriptsDir/workspace-rs move 3  auto
+bind = $mainMod $moveMod, 4,  exec, $scriptsDir/workspace-rs move 4  auto
+bind = $mainMod $moveMod, 5,  exec, $scriptsDir/workspace-rs move 5  auto
+bind = $mainMod $moveMod, 6,  exec, $scriptsDir/workspace-rs move 6  auto
+bind = $mainMod $moveMod, 7,  exec, $scriptsDir/workspace-rs move 7  auto
+bind = $mainMod $moveMod, 8,  exec, $scriptsDir/workspace-rs move 8  auto
+bind = $mainMod $moveMod, 9,  exec, $scriptsDir/workspace-rs move 9  auto
+bind = $mainMod $moveMod, 10, exec, $scriptsDir/workspace-rs move 10 auto
+
+# Create a new unnamed workspace and move the focused window to it.
+bind = $mainMod $moveMod, N, exec, $scriptsDir/workspace-rs create -w auto 
+
+# switch focus
+bind = $mainMod, H, movefocus, l
+bind = $mainMod, J, movefocus, d
+bind = $mainMod, K, movefocus, u
+bind = $mainMod, L, movefocus, r
+
+# move focussed window
+bind = $mainMod $moveMod, H, movewindow, l
+bind = $mainMod $moveMod, J, movewindow, d
+bind = $mainMod $moveMod, K, movewindow, u
+bind = $mainMod $moveMod, L, movewindow, r
+
+bindm = $mainMod, mouse:272, movewindow
+
+# resize focessed window
+binde = $mainMod $moveMod $launchMod, H, resizeactive, -10 0  # left
+binde = $mainMod $moveMod $launchMod, J, resizeactive,  0  10 # down
+binde = $mainMod $moveMod $launchMod, K, resizeactive,  0 -10 # up
+binde = $mainMod $moveMod $launchMod, L, resizeactive,  10 0  # right
+
+bindm = $mainMod $moveMod, mouse:272, resizewindow
+
+# volume controls
+bindle = , XF86AudioRaiseVolume, exec, $scriptsDir/volume adjust up
+bindle = , XF86AudioLowerVolume, exec, $scriptsDir/volume adjust down
+bindl  = , XF86AudioMute       , exec, $scriptsDir/volume toggle-mute
+
+# media controls
+bindle = , XF86AudioPlay, exec, $scriptsDir/media play-pause
+bindle = , XF86AudioNext, exec, $scriptsDir/media next
+bindle = , XF86AudioPrev, exec, $scriptsDir/media previous
+
+# brightness controls
+bindle = , XF86MonBrightnessUp  , exec, $scriptsDir/brightness adjust up
+bindle = , XF86MonBrightnessDown, exec, $scriptsDir/brightness adjust down
+
+# clipboard menu
+bind = $mainMod, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy

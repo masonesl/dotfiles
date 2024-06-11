@@ -1,0 +1,21 @@
+source = ./variables.hl
+
+decoration {
+  rounding = 12
+
+  active_opacity   = 0.95
+  inactive_opacity = 0.95
+
+  shadow_render_power = 2
+  shadow_range        = 10
+
+  col.shadow          = rgba($black55)
+  col.shadow_inactive = rgba(00000000)
+
+  blur {
+    size   = 10
+    passes = 3
+    xray   = true
+    popups = true
+  }
+}

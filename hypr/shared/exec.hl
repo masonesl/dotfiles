@@ -1,0 +1,12 @@
+# authenication agent
+exec-once = /usr/lib/polkit-kde-authentication-agent-1
+
+# wallpaper daemon
+exec-once = swww init
+
+# clipboard manager
+exec-once = wl-paste --type text  --watch cliphist store
+exec-once = wl-paste --type image --watch cliphist store
+
+# idle daemon
+exec-once = hypridle
