@@ -3,3 +3,4 @@ neovim/lua/.luarc.json
 tmux/plugins/*
 nvim/lazy-lock.json
 dotfiles-rs/target
+hypr/hyprland.conf
