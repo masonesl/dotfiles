@@ -1,13 +1,13 @@
 local t = {}
 
 local function config()
-  require('nvim-treesitter').setup {
+  require('nvim-treesitter.configs').setup {
     ensure_installed = {
       'lua',
       'python',
       'rust',
-      'help',
       'c',
+      'hyprlang',
     },
     sync_install = false,
     highlight = {
