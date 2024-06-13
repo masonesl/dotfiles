@@ -21,6 +21,11 @@ k.set('n', '<C-j>', ':wincmd j<CR>');
 k.set('n', '<C-k>', ':wincmd k<CR>');
 k.set('n', '<C-l>', ':wincmd l<CR>');
 
+k.set('n', '<C-h>', ':TmuxNavigateLeft<CR>');
+k.set('n', '<C-j>', ':TmuxNavigateDown<CR>');
+k.set('n', '<C-k>', ':TmuxNavigateUp<CR>');
+k.set('n', '<C-l>', ':TmuxNavigateRight<CR>');
+
 k.set('n', '<leader>tr', function ()
   require('trouble').toggle()
 end)

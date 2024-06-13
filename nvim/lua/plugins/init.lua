@@ -105,4 +105,8 @@ return {
     -- TODO: add plugin config
     opts = {},
   },
+  {
+    'christoomey/vim-tmux-navigator',
+    lazy = false,
+  },
 }
