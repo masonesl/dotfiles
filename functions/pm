@@ -1,8 +1,9 @@
 #!/usr/bin/env zsh
 
-PROJECTS_DIR="$HOME/Documents/Projects/"
 
 function pm {
+  PROJECTS_DIR="$HOME/Documents/Projects/"
+
   case "$1" in
     o)
       PROJECT_PATH="$PROJECTS_DIR/$2"
