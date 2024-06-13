@@ -26,11 +26,14 @@ alias lt='lsd --tree'
 
 alias wget='wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'
 
-alias p='pacman'
+alias pp='pacman'
+alias p='paru'
 alias s='sudo '
 alias n='nvim'
 alias c='cd'
 alias m='mkdir --parents'
+alias sd='systemctl'
+alias sd='systemctl --user'
 
 alias h='history 1 | grep'
 
