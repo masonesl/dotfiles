@@ -17,6 +17,8 @@ function g {
       OPTIONS+=("commit" "-m") ;;
     d)
       OPTIONS+=("diff") ;;
+    r)
+      OPTIONS+=("restore" "--staged") ;;
     *)
       git $ARGS
       return
