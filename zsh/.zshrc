@@ -46,7 +46,7 @@ alias grep="rg"
 #############
 
 #Import directory containing functions
-export FPATH=$FPATH:~/.local/share/zfunctions
+export FPATH=$FPATH:$ZDOTDIR/functions/
 
 autoload unknow
 autoload t
